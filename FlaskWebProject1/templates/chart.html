@@ -1,0 +1,128 @@
+﻿{% extends "layout.html" %}
+
+{% block content %}
+<button class="btn btn-success" id="getall">Alle</button>
+<div class="row">
+    <div class="col-12">
+        <h2>{{ title }}</h2>
+        <div id="container" style="height: 400px; min-width: 310px"></div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="http://code.highcharts.com/stock/highstock.js"></script>
+<script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="http://blacklabel.github.io/annotations/js/annotations.js"></script>
+
+<script type="text/javascript">
+    //var chart = {};
+    /*$('#getall').click(function () {
+        console.log(chart.showLoading()); 
+    });
+    */
+    function getChartData() {
+
+        $.ajax({
+            url: '/json/TEL.OL',
+            //data: JSON.stringify({ 'id': id }),
+            type: 'GET',
+            /*
+            beforeSend: function () {
+                $(".nano").nanoScroller();
+                novi_full_table.find('tbody').html('<tr><td colspan="4">Henter data <i class="fa fa-refresh fa-spin"></i></td></tr>');
+            },
+            */
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                returndata = [];
+                $.each(data[0], function (e, o) {
+                    //console.log(new Date(Date.parse(e)));
+                    //console.log(o);
+                    var date = Date.parse(o[0]);
+                    returndata.push(
+                        date, o[1], o[2], o[3], o[4]
+                        
+                    );
+
+                });
+                //createStockChart();
+                //console.log("adadada");
+                //console.log(new Date(2012, 0, 1));
+
+                //chartData = data;
+            }
+        });
+    }
+    
+
+    $(function () {
+        data = getChartData();
+//    $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?a=e&filename=aapl-ohlc.json&callback=?', function (data) {
+
+        // create the chart
+        $('#container').highcharts('StockChart', {
+            rangeSelector : {
+                selected : 1
+            },
+            title : {
+                text : 'AAPL Stock Price'
+            },
+            events: {
+                click: function (e) { console.log(this), this },
+                
+            },  
+            annotations: [{
+                x: 100,
+                y: 200,
+                title: 'drag me <br> verticaly',
+                anchorX: "left",
+                anchorY: "top",
+                allowDragY: true,
+                allowDragX: false,
+                shape: {
+                    type: 'rect',
+                    params: {
+                        x: 0,
+                        y: 0,
+                        width: 55,
+                        height: 40
+                    }
+               },
+                events: {
+                    click: function (e) { alert("Annotation clicked:"), this },
+                    mouseup: function (e) { console.log(this), this },
+                }   
+            }],
+            series : [{
+                type : 'candlestick',
+                name : 'AAPL Stock Price',
+                data : data,
+                dataGrouping : {
+                    units : [
+                        [
+                            'week', // unit name
+                            [1] // allowed multiples
+                        ], [
+                            'month',
+                            [1, 2, 3, 4, 6]
+                        ]
+                    ]
+                }
+            }]
+        });
+
+        //var chart = 
+
+        $('#getall').click(function () {
+            var a = $('#container').highcharts();//.showLoading();
+            console.log(a);
+        });
+   // });
+});
+
+</script>
+
+{% endblock %}

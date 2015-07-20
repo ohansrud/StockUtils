@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>aec962e5-2ccf-4429-9b25-d4bb935cfeae</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <ProjectTypeGuids>{789894c7-04a9-4a11-a6b5-3f4435165112};{1b580a1a-fdb3-4b32-83e1-6407eb2722e6};{349c5851-65df-11da-9384-00065b846f21};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <StartupFile>runserver.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <OutputPath>.</OutputPath>
+    <StaticUriPattern>^/static/.*</StaticUriPattern>
+    <StaticUriRewrite>^/$(MSBuildProjectName)/static/.*</StaticUriRewrite>
+    <PythonWsgiHandler>$(MSBuildProjectName).app</PythonWsgiHandler>
+    <Name>FlaskWebProject1</Name>
+    <RootNamespace>FlaskWebProject1</RootNamespace>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="FlaskWebProject1\controllers\maincontroller.py" />
+    <Compile Include="FlaskWebProject1\models\Backtesters.py" />
+    <Compile Include="FlaskWebProject1\models\Scanners.py" />
+    <Compile Include="FlaskWebProject1\models\StockQuote.py" />
+    <Compile Include="runserver.py" />
+    <Compile Include="FlaskWebProject1\__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FlaskWebProject1\" />
+    <Folder Include="FlaskWebProject1\controllers\" />
+    <Folder Include="FlaskWebProject1\models\" />
+    <Folder Include="FlaskWebProject1\static\" />
+    <Folder Include="FlaskWebProject1\static\content\" />
+    <Folder Include="FlaskWebProject1\static\fonts\" />
+    <Folder Include="FlaskWebProject1\static\samples\" />
+    <Folder Include="FlaskWebProject1\static\samples\images\" />
+    <Folder Include="FlaskWebProject1\static\scripts\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\images\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\lang\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\patterns\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\patterns\chalk\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\data\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\lang\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\images\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\lang\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\blob.js\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\fabric.js\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\FileSaver.js\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\jszip\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\pdfmake\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\xlsx\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\images\" />
+    <Folder Include="FlaskWebProject1\static\scripts\amcharts\themes\" />
+    <Folder Include="FlaskWebProject1\templates\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FlaskWebProject1\static\samples\images\bg.jpg" />
+    <Content Include="FlaskWebProject1\static\samples\images\overlay1.png" />
+    <Content Include="FlaskWebProject1\static\samples\images\overlay2.png" />
+    <Content Include="FlaskWebProject1\static\samples\images\overlay3.png" />
+    <Content Include="FlaskWebProject1\static\samples\images\overlay4.png" />
+    <Content Include="FlaskWebProject1\static\samples\images\style.css" />
+    <Content Include="FlaskWebProject1\static\samples\rustyStockChart.html" />
+    <Content Include="FlaskWebProject1\static\samples\stockAddRemovePanel.html" />
+    <Content Include="FlaskWebProject1\static\samples\stockDrawingTrendLines.html" />
+    <Content Include="FlaskWebProject1\static\samples\stockEvents.html" />
+    <Content Include="FlaskWebProject1\static\samples\stockIntradayData.html" />
+    <Content Include="FlaskWebProject1\static\samples\stockMultipleDataSets.html" />
+    <Content Include="FlaskWebProject1\static\samples\stockMultiplePanels.html" />
+    <Content Include="FlaskWebProject1\static\samples\style.css" />
+    <Content Include="FlaskWebProject1\static\samples\_exporting_to_multiple_formats.html" />
+    <Content Include="FlaskWebProject1\static\samples\_JSON_intradayData.html" />
+    <Content Include="FlaskWebProject1\static\samples\_JSON_stockDrawingTrendLines.html" />
+    <Content Include="FlaskWebProject1\static\samples\_JSON_stockEvents.html" />
+    <Content Include="FlaskWebProject1\static\samples\_JSON_stockMultipleDataSets.html" />
+    <Content Include="FlaskWebProject1\static\samples\_JSON_stockMultiplePanels.html" />
+    <Content Include="FlaskWebProject1\static\samples\_usingThemes.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\amcharts.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\amstock.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIcon.gif" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconBlack.gif" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconH.gif" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconHBlack.gif" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRectBig.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRectBigBlack.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRectBigBlackH.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRectBigH.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRectSmall.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRectSmallBlack.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRectSmallBlackH.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRectSmallH.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRoundBig.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRoundBigBlack.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRoundBigBlackH.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRoundBigH.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRoundSmall.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRoundSmallBlack.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRoundSmallBlackH.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\dragIconRoundSmallH.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\eraserIcon.gif" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\eraserIcon.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\eraserIconH.gif" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\eraserIconH.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\export.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\exportWhite.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\lens.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\lensWhite.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\lensWhite_old.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\lens_old.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\pencilIcon.gif" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\pencilIcon.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\pencilIconH.gif" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\pencilIconH.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\xIcon.gif" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\xIcon.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\xIconH.gif" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\images\xIconH.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\az.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\bg.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\de.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\es.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\fi.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\fo.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\fr.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\hr.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\hu.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\id.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\is.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\it.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\lt.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\lv.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\mk.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\mn.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\mt.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\nl.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\no.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\pl.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\pt.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\ro.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\ru.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\rw.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\sk.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\so.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\th.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\lang\tr.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern1.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern10.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern11.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern12.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern13.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern14.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern15.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern16.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern17.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern18.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern19.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern2.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern20.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern21.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern3.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern4.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern5.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern6.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern7.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern8.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\black\pattern9.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\chalk\pattern1.jpg" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\chalk\pattern1r.jpg" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\chalk\pattern2.jpg" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\chalk\pattern3.jpg" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\chalk\pattern4.jpg" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\chalk\pattern5.jpg" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\chalk\pattern6.jpg" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern1.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern10.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern11.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern12.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern13.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern14.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern15.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern16.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern17.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern18.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern19.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern2.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern20.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern21.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern3.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern4.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern5.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern6.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern7.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern8.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\patterns\white\pattern9.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\dataloader.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\dataloader.min.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\data\map.json" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\data\MSFT.csv" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\data\MSFT_events.csv" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\data\pie.csv" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\data\pie.json" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\data\serial.csv" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\data\serial.json" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\data\serial2.json" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\data\TXN.csv" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\map_json.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\pie_csv.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\pie_json.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\serial2_json.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\serial_csv.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\serial_json.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\serial_with_dynamic_graphs.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\examples\stock_csv_data_and_events.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\lang\en.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\lang\lt.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\license.txt" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\dataloader\readme.md" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\export.config.advanced.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\export.config.default.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\funnel.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\gantt.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\gauge.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\images\bicycle.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\images\car.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\images\motorcycle.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\index.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\map.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\pie1.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\pie2.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\pie3.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\pie4.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\radar.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\serial1.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\serial2.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\serial3.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\stock.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\examples\xy.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\export.css" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\export.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\export.min.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\lang\de.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\lang\en.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\lang\lt.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\blob.js\blob.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\fabric.js\.travis.yml" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\fabric.js\fabric.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\fabric.js\fabric.min.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\FileSaver.js\FileSaver.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\FileSaver.js\FileSaver.min.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\jszip\jszip.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\jszip\jszip.min.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\pdfmake\pdfmake.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\pdfmake\pdfmake.min.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\pdfmake\pdfmake.min.js.map" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\pdfmake\pdfmake.min.map" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\pdfmake\vfs_fonts.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\xlsx\LICENSE" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\xlsx\xlsx.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\xlsx\xlsx.min.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\libs\xlsx\xlsx.min.map" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\LICENSE" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\export\README.md" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\funnel.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\gantt.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\gauge.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\images\bicycle.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\images\car.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\images\motorcycle.png" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\index.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\map.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\pie1.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\pie2.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\pie3.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\radar.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\serial1.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\serial2.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\serial3.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\stock.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\examples\xy.html" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\license.txt" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\readme.md" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\responsive.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\responsive.min.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\plugins\responsive\responsive.min.js.map" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\serial.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\style.css" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\themes\black.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\themes\chalk.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\themes\dark.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\themes\light.js" />
+    <Content Include="FlaskWebProject1\static\scripts\amcharts\themes\patterns.js" />
+    <Content Include="FlaskWebProject1\templates\chart.html" />
+    <Content Include="FlaskWebProject1\templates\stockDrawingTrendLines.html" />
+    <Content Include="requirements.txt" />
+    <Content Include="FlaskWebProject1\static\content\bootstrap.css" />
+    <Content Include="FlaskWebProject1\static\content\bootstrap.min.css" />
+    <Content Include="FlaskWebProject1\static\content\site.css" />
+    <Content Include="FlaskWebProject1\static\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="FlaskWebProject1\static\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="FlaskWebProject1\static\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="FlaskWebProject1\static\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="FlaskWebProject1\static\scripts\bootstrap.js" />
+    <Content Include="FlaskWebProject1\static\scripts\bootstrap.min.js" />
+    <Content Include="FlaskWebProject1\static\scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="FlaskWebProject1\static\scripts\jquery-1.10.2.js" />
+    <Content Include="FlaskWebProject1\static\scripts\jquery-1.10.2.min.js" />
+    <Content Include="FlaskWebProject1\static\scripts\jquery-1.10.2.min.map" />
+    <Content Include="FlaskWebProject1\static\scripts\jquery.validate-vsdoc.js" />
+    <Content Include="FlaskWebProject1\static\scripts\jquery.validate.js" />
+    <Content Include="FlaskWebProject1\static\scripts\jquery.validate.min.js" />
+    <Content Include="FlaskWebProject1\static\scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="FlaskWebProject1\static\scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="FlaskWebProject1\static\scripts\modernizr-2.6.2.js" />
+    <Content Include="FlaskWebProject1\static\scripts\respond.js" />
+    <Content Include="FlaskWebProject1\static\scripts\respond.min.js" />
+    <Content Include="FlaskWebProject1\static\scripts\_references.js" />
+    <Content Include="FlaskWebProject1\templates\about.html" />
+    <Content Include="FlaskWebProject1\templates\contact.html" />
+    <Content Include="FlaskWebProject1\templates\index.html" />
+    <Content Include="FlaskWebProject1\templates\layout.html" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />
+  <!-- Specify pre- and post-build commands in the BeforeBuild and 
+       AfterBuild targets below. -->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <AutoAssignPort>True</AutoAssignPort>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
