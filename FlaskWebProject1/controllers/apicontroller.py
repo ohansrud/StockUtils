@@ -37,3 +37,33 @@ def saveannotations(ticker):
         resp = jsonify(error=data)
         resp.status_code = 500
         return resp
+
+
+@app.route('/json/<ticker>')
+def json(ticker):
+    today = datetime.today()
+    day = timedelta(days=1)
+    year = timedelta(days=(365*2))
+    start = today-year
+    end = today-day
+    try:
+        s = st(ticker, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
+        s.df['index'] = s.df.index
+        subset = s.df[['index', 'open', 'high', 'low', 'close', 'volume']]
+
+        s.df['index'] = s.df.index
+
+        tuples = [tuple(x) for x in subset.values]
+
+        resp = jsonify(result=tuples)
+        resp.status_code = 200
+
+        return resp
+    except ValueError:
+        data=sys.exc_info()[0]
+    except:
+        data=sys.exc_info()[0]
+        resp = jsonify(error=data)
+        resp.status_code = 500
+
+        return resp

@@ -1,33 +1,54 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="en" ng-app="app" >
+<head>
+	<meta charset="utf-8">
+    <title> My Flask Application</title>
+    <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
+    <script src="/static/scripts/modernizr-2.6.2.js"></script>
+    <script src="/static/scripts/jquery-1.10.2.js"></script>
+    <script src="/static/scripts/bootstrap.js"></script>
+    <script src="/static/scripts/respond.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.js"></script>
+    <script src="//code.highcharts.com/stock/highstock.src.js"></script>
+    <script src="/static/scripts/annotations.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
 
-{% block content %}
+    <script src="//rawgithub.com/pablojim/highcharts-ng/master/src/highcharts-ng.js"></script>
 
-<div class="jumbotron">
-    <h1>Flask</h1>
-    <p class="lead">Flask is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://flask.pocoo.org/" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-</div>
+    <script src="/static/scripts/app.js"></script>
+</head>
+<body>
+	<div id="header" class="header navbar navbar-static-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				</button>
+				<a class="brand" href="/">AngularFlask</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav pull-right">
+						<li class="">
+							<a href="/">Home</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container page">
+        {{title}}
+		<div id="content" class="container main" ng-view>
+		</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            Flask gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://flask.pocoo.org/docs/">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>The Python Package Index is a repository of software for the Python programming language.</p>
-        <p><a class="btn btn-default" href="https://pypi.python.org/pypi">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Microsoft Azure</h2>
-        <p>You can easily publish to Microsoft Azure using Python Tools for Visual Studio. Find out how you can host your application using a free trial today.</p>
-        <p><a class="btn btn-default" href="http://azure.microsoft.com">Learn more &raquo;</a></p>
-    </div>
-</div>
-
-{% endblock %}
+		<hr>
+		<footer id="footer" class="footer">
+			<div class="footer-left">
+				<a href="/about">About</a> |
+				<a href="/">Home</a>
+			</div>
+			<div class="footer-right">
+				<span>&copy; 2013 AngularFlask</span>
+			</div>
+		</footer>
+	</div>
+</body>

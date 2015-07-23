@@ -4,27 +4,25 @@
 
 //the function expression that will
 //configure our router module
-var configFunction = function ($routeProvider) {
-    $routeProvider
-    .when('/chart/:ticker', {
-        templateUrl: '../static/ng-templates/about.html',
-        controller: 'Ctrl',
-    })
-    .when('/bla/:ticker', {
-        templateUrl: '../static/ng-templates/about.html',
-        controller: 'Ctrl',
-    })
-    .otherwise({
-        templateUrl: '../static/ng-templates/about.html',
-        controller: 'Ctrl',
-    });
-};
+'use strict';
 
-var app = angular.module("app", ['ngRoute', 'highcharts-ng']);
+function TickerCtrl($scope , $routeParams) {
+    //alert("ticker");
+    //alert($routeParams.ticker);
+    $scope.title = "TEL.OL";
+    $scope.loading = false;
 
-app.controller("Ctrl", ['$scope', '$http', '$routeParams',function Ctrl($scope, $routeParams) {
+}
 
-    $scope.ticker = $routeParams.ticker;
+function AboutCtrl($scope ) {
+    alert("About");
+    $scope.title = "TEL.OL";
+    $scope.loading = false;
+
+}
+
+function Ctrl($scope ) {
+
 
     $scope.title = "TEL.OL";
     $scope.loading = false;
@@ -44,6 +42,7 @@ app.controller("Ctrl", ['$scope', '$http', '$routeParams',function Ctrl($scope, 
             }
         }
     ];
+
     $scope.status = {};
     $scope.addannotations = function(){
         $.each($scope.trendlines, function (e, o) {
@@ -327,9 +326,6 @@ app.controller("Ctrl", ['$scope', '$http', '$routeParams',function Ctrl($scope, 
             credits: {
                 enabled: false
             },
-            credits: {
-                enabled: false
-            },
 
             loading: $scope.loading,
             /*
@@ -522,8 +518,38 @@ app.controller("Ctrl", ['$scope', '$http', '$routeParams',function Ctrl($scope, 
     }
 
 
+}
+
+var app = angular.module("app", ['ngRoute', 'highcharts-ng']);
+app.controller("AboutCtrl", ['$scope', '$http' ,AboutCtrl]);
+
+app.controller("TickerCtrl", ['$scope', '$http' ,TickerCtrl]);
+
+app.controller("Ctrl", ['$scope', '$http' ,Ctrl]);
+
+app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+		$routeProvider
+
+		.when('/', {
+			templateUrl: '/templates/about.html',
+			controller: Ctrl
+		});
+            /*
+		.when('/ticker/:ticker', {
+			templateUrl: '/templates/about.html',
+			controller: function($scope,  $location) {
+                $scope.title =$routeParams.ticker;
+                $location.path('/view2/'+$scope.firstname+'/' +$scope.lastname);
+            }
+		})
+		.otherwise({
+			templateUrl: '/templates/about.html',
+			controller: function($scope) {
+
+            }
+		});
+*/
+		//$locationProvider.html5Mode(true);
 }]);
 
-//call the config method of our router module
-app.config(['$routeProvider', configFunction]);
 
