@@ -1,0 +1,350 @@
+body {
+  background: #fff;
+  color: #4e4f4d;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 9pt;
+  margin: 0px;
+}
+#chart {
+		min-width: 1150px;
+}
+#chart-details {
+		width: 400px;
+		height: 250px;
+		top: 175px;
+		left: 100px;
+		position: absolute;
+		z-index: 500;
+		-webkit-box-shadow: 0px 0px 4px 0px #7d7d7d;
+    	box-shadow: 0px 0px 4px 0px #7d7d7d;
+    	-moz-box-shadow: 0px 0px 4px 0px #7d7d7d;
+}
+
+
+#chart-details .highcharts-title {
+		left: 0px !important;
+		cursor: move;
+}
+
+#highcharts-save {
+	margin-right: 7px;
+}
+
+#highcharts-edit-annotation {
+	position: absolute;
+	z-index: 50;
+	float:left;
+	display: none;
+	width: 150px;
+	/*height: 100px;*/
+	padding-bottom:10px;
+	background-color: white;
+	-webkit-box-shadow: 0px 0px 4px 0px #7d7d7d;
+    box-shadow: 0px 0px 4px 0px #7d7d7d;
+    -moz-box-shadow: 0px 0px 4px 0px #7d7d7d;
+}
+
+#highcharts-change-annotation {
+		float: right;
+}
+
+#highcharts-remove-annotation {
+		float: left;
+		margin-left:10px;
+		margin-top:15px;
+		text-decoration: underline;
+		cursor: pointer;
+}
+
+.highcharts-annotation {
+		cursor: move;
+}
+
+.highchart-edit-annotation-row {
+	float:left;
+	width:100%;
+}
+
+.highchart-edit-annotation-row.with-title .highcharts-title-edit-box,  .highchart-edit-annotation-row.without-title span{
+	background-color: #f2f2f2;
+	width:100%;
+	float:left;
+	font-size:14px;
+	text-align: center;
+	padding:5px 0px;
+}
+
+.highchart-edit-annotation-row.without-title label {
+	float: left;
+	margin-left: 10px;
+	margin-top: 10px;
+	width: 130px;
+}
+
+.highchart-edit-annotation-row input.menu-btn{
+	border-right:1px solid #cccccc;
+	float:left;
+	margin-left:10px;
+	width: 72%;
+	margin-top:10px;
+	cursor: text;
+}
+
+.highchart-edit-annotation-row .menu-btn{
+	border:1px solid #cccccc;
+	float:left;
+	margin-top: 8px;
+}
+.highchart-edit-annotation-row .label-colorPicker{
+	width: 95px !important;
+}
+
+.highchart-edit-annotation-row input.menu-btn:hover {
+	border:1px solid #6688aa;
+}
+#highcharts-change-fill {
+	background-color: #e7f0f9
+}
+#highcharts-change-border {
+	background-color: #6688aa;
+}
+
+input.menu-btn:hover {
+	background-color:#fff;
+}
+
+.highchart-edit-annotation-row button {
+	margin-top:10px;
+	margin-right:10px;
+	float: right;
+	border-color:#6688aa;
+	background-color:#e7f0f9;
+}
+
+.highchart-edit-annotation-row button:hover {
+	background-color:#6688aa;
+	border-color:#325b83;
+}
+
+
+/*** HELLO MESSAGE: ***/
+#hello-msg {
+		display: block;
+}
+
+/*** TOOLTIP CSS: ***/
+
+#tooltip, #hello-msg-box {
+	position: absolute;
+	display: none;
+	width: 200px;
+	/*height: 150px;*/
+	background-color: #333333;
+	color: #dcdcdc;
+	z-index: 1000;
+	box-shadow: 0 5px 15px rgba(0,0,0,.5);
+	border: 1px solid rgba(0,0,0,.2);
+	font-size: 12px;
+}
+
+#hello-msg-box {
+	display:block;
+	width: 310px;
+	top: 45%;
+	left: 50%;
+	margin-left: -155px;
+}
+
+#tooltip .diamond {
+	position: absolute;
+	height: 15px;
+	width: 15px;
+	background-color: #333333;
+	transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+}
+
+#tooltip .tooltip-content, #hello-msg-box .tooltip-content {
+	padding: 5px;
+}
+
+#tooltip .tooltip-title , #hello-msg-box .tooltip-title {
+	padding: 5px;
+	font-size: 16px;
+	color:#00b4ff;
+}
+
+#tooltip .tooltip-subcontent, #hello-msg-box .tooltip-subcontent {
+	padding: 5px;
+}
+
+#tooltip .tooltip-paginator, #hello-msg-box .tooltip-paginator {
+	width: 100%;
+	text-align: center;
+	padding: 5px 0px;
+	background-color: #454545;
+	float:left;
+}
+
+#tooltip .tooltip-paginator .info {
+	float:left;
+	margin-left:10px;
+	line-height: 2em;
+}
+
+#hello-msg-box .tooltip-paginator {
+	width:100%;
+}
+
+#tooltip .tooltip-prev, #tooltip .tooltip-next {
+	cursor: pointer;
+}
+
+#tooltip .tooltip-close, #hello-msg-box .tooltip-close, .cancel {
+	background:url('../images/cancel-ico.png') no-repeat 0% 0%;
+	float: right;
+	cursor: pointer;
+	width:10px;
+	height:10px;
+	margin-right: 10px;
+	margin-top: 10px;
+}
+
+.cancel {
+	position: absolute;
+	right:0;
+	top:-2px;
+}
+
+
+.tooltip-mask {
+	background-color: rgba(0,0,0,0.25);
+	opacity: 1;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%;
+	z-index: 999;
+	display: none;
+}
+
+#tooltip-mask-top {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+#tooltip-mask-center {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%;
+	z-index: 999;
+	display: none;
+	/*box-shadow: 0 5px 15px rgba(0,0,0,.5);*/
+	box-shadow: inset 0px 7px 12px -6px rgba(0,0,0,.5);
+	box-shadow: inset 0px 6px 12px -4px rgba(0,0,0,.7);
+	/*border: 1px solid rgba(0,0,0,.2);*/
+}
+
+.blue-btn {
+	color: #fff;
+	cursor: pointer;
+	background-color:#00a1e4;
+	border:none;
+	padding:5px 10px;
+}
+
+.menu-btn {
+	color: #000;
+	cursor: pointer;
+	background-color:#fff;
+	border:1px solid #cccccc;
+	padding:4px 10px;
+	margin-right:0px;
+	margin-left:0px;
+}
+
+.menu-btn:hover {
+	background-color:#99bbdd;
+	border-color:#6688aa;
+}
+
+.blue-btn:hover {
+	background-color:#008fca;
+}
+
+.right {
+	float:right;
+	margin-right:10px;
+}
+
+.select {
+	width:86px;
+	overflow: hidden;
+}
+
+select {
+	-webkit-appearance: button;
+   -webkit-border-radius: 0px;
+   -webkit-user-select: none;
+   background: url('../images/arrow-down.png') no-repeat 62% -5px #fff;
+   border: 1px solid #ccc;
+   color: #555;
+   overflow: hidden;
+   padding: 4px 20px 4px 10px;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   width:120px;
+   float:left;
+}
+
+select:hover {
+	background-position: 62% -36px;
+	background-color:#99bbdd;
+	border-color:#6688aa;
+}
+
+#menu-nav {
+	position: absolute;
+	z-index: 50;
+	width: 455px;
+}
+
+#menu-nav div {
+	float:left;
+	margin-left:12px;
+}
+
+input.menu-btn {
+	border-right:0px;
+	padding: 4px 1px;
+}
+
+input.menu-btn:hover {
+	color:#000;
+}
+
+/* COLOR PICKER CUSTOM */
+.colorpicker {
+		z-index: 100 !important;
+		width: 216px !important;
+		-webkit-box-shadow: 0px 0px 4px 0px #7d7d7d;
+		box-shadow: 0px 0px 4px 0px #7d7d7d;
+		-moz-box-shadow: 0px 0px 4px 0px #7d7d7d;
+}
+.colorPicker {
+		width: 10px;
+		height: 10px;
+}
+.colorpicker_field, .colorpicker_hex, .colorpicker_submit, .colorpicker_new_color, .colorpicker_current_color {
+	display: none !important;
+}
+
+
+

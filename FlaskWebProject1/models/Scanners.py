@@ -1,5 +1,5 @@
 from datetime import date, timedelta, datetime
-from StockQuote import StockQuote
+from FlaskWebProject1.models.StockQuote import StockQuote as st
 
 portfolio_OL = ["ASC.OL","APCL.OL","AFG.OL","AGA.OL","AKA.OL","AKER.OL","AKPS.OL","AKSO.OL",
 "AKVA.OL","AMSC.OL","ABT.OL","ARCHER.OL","AFK.OL","ASETEK.OL","ATEA.OL","AURLPG.OL","AUSS.OL","AVANCE.OL","AVM.OL","AWDR.OL","BAKKA.OL","BEL.OL",
@@ -26,7 +26,7 @@ def scanner_obv():
         end = today-day
 
         try:
-            s = StockQuote(item, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
+            s = st(item, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
             t = s.scan_obv()
             if t == True:
                 found.append(item)
@@ -50,7 +50,7 @@ def scanner_doublecross():
         end = today-day
 
         try:
-            s = StockQuote(item, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
+            s = st(item, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
             t = s.scan_doublecross()
             if t == True:
                 found.append(item)
@@ -74,7 +74,7 @@ def scanner_rsi():
         end = today-day
 
         try:
-            s = StockQuote(item, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
+            s = st(item, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
             t = s.scan_rsi()
             if t == True:
                 found.append(item)

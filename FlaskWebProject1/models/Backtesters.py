@@ -1,5 +1,6 @@
 from datetime import date, timedelta, datetime
-from StockQuote import StockQuote
+from FlaskWebProject1.models.StockQuote import StockQuote as st
+
 import ystockquote as y
 
 def backtester_doublecross(item):
@@ -12,7 +13,7 @@ def backtester_doublecross(item):
     end = today-day
 
     try:
-        s = StockQuote(item, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
+        s = st(item, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
     except:
         print("Import Error")
     #s = None
@@ -37,7 +38,7 @@ def backtester_rsi(item):
     end = today-day
 
     try:
-        s = StockQuote(item, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
+        s = st(item, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
     except:
         print("Import Error")
     #s = None

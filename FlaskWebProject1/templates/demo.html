@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	
+	<title>Demo</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+	<link rel="stylesheet" media="screen" type="text/css" href="css/colorpicker.css" />
+	<link rel="stylesheet" charset="utf-8" type="text/css" href="css/demo.css"/>
+	
+	<script type="text/javascript" src="/static/scripts/jquery-1.10.2.min.js"></script>
+	
+	</head>
+	<body>
+	
+	<div id="hello-msg-box">
+		<div class="tooltip-close"></div>
+		<div class="tooltip-content">
+				<div class="tooltip-title">Welcome</div>
+				<div class="tooltip-subcontent">This is a basic example of Highstock implementation. <br> Click through and check what we can do for you.</div>
+		</div>
+		<div class="tooltip-paginator">
+				<button class="hello-start-tutorial blue-btn right">Start</button>
+		</div>
+	</div>
+	
+	<!-- markup -->
+	<div id="tooltip-mask-top" class="tooltip-mask"></div>
+	<div id="tooltip-mask-right" class="tooltip-mask"></div>
+	<div id="tooltip-mask-bottom" class="tooltip-mask"></div>
+	<div id="tooltip-mask-left" class="tooltip-mask"></div>
+	<div id="tooltip-mask-center"></div>
+	<div id="tooltip">
+		<div class="diamond"></div>
+		<div class="tooltip-close"></div>
+		<div class="tooltip-content"></div>
+		<div class="tooltip-paginator">
+				<div class="info">
+					<span class="tooltip-actual"></span>
+					<span> of </span>
+					<span class="tooltip-max"></span>
+				</div>
+				<span class="tooltip-next blue-btn right">&rarr;</span>
+				<span class="tooltip-prev blue-btn right">&larr;</span>
+				<span class="tooltip-end blue-btn right">Try!</span>
+		</div>
+	</div>
+	
+	<div id="menu-nav">
+		<div class="select">
+			<select id="highcharts-sources">
+				<option value="aapl-ohlcv"> Apple </option>
+				<option value="goog-c"> Google </option>
+				<option value="msft-c"> Microsoft </option>
+			</select>
+		</div>
+		<div id="highcharts-manage-chart">
+			<button id="highcharts-save" class="menu-btn"> Save chart </button>
+			<button id="highcharts-reset" class="menu-btn"> Clear chart </button>
+		</div>
+		<div>
+			<button id="highcharts-restart-tutorial" class="menu-btn"> Tutorial </button>
+		</div>
+		<div class="select">
+			<select id="highcharts-indicators">
+				<option value="sma"> SMA </option>
+				<option value="rsi"> RSI </option>
+				<option value="ema"> EMA </option>
+				<option value="atr"> ATR </option>
+			</select>
+		</div>
+	</div>
+	
+	<div id="chart-details"></div>
+	<div id="chart"></div>
+	
+	<div id="highcharts-edit-annotation">
+			<div class="cancel"></div>
+			<div class="highchart-edit-annotation-row without-title">  
+					<span>Edit</span>
+					<label for="highcharts-change-fill visible" class="label-colorPicker">Set fill color </label>
+					<div type="text" id="highcharts-change-fill" class="menu-btn colorPicker"></div>
+			</div>
+			<div class="highchart-edit-annotation-row without-title">  
+					<label for="highcharts-change-border visible label-colorPicker" class="label-colorPicker">Set border color </label>
+					<div type="text" id="highcharts-change-border" class="menu-btn colorPicker"></div>
+			</div>
+			<div class="highchart-edit-annotation-row with-title">  
+					<span class="highcharts-title-edit-box">Edit text</span>
+					<input type="text" id="highcharts-change-title" class="menu-btn"/>
+			</div>
+			<div class="highchart-edit-annotation-row">  
+					<a id="highcharts-remove-annotation">Remove</a>
+					<button id="highcharts-change-annotation" class="menu-btn">OK</button>
+			</div>
+	</div>
+
+    <script src="//code.highcharts.com/stock/highstock.src.js"></script>
+
+    <script type="text/javascript" src="//demo.blacklabel.pljs/indicators.min.js"></script>
+    <script type="text/javascript" src="//demo.blacklabel.pljs/draggable-points.min.js"></script>
+	<script type="text/javascript" src="//demo.blacklabel.pljs/sma.min.js"></script>
+	<script type="text/javascript" src="//demo.blacklabel.pljs/ema.min.js"></script>
+	<script type="text/javascript" src="//demo.blacklabel.pljs/atr.min.js"></script>
+	<script type="text/javascript" src="//demo.blacklabel.pljs/rsi.min.js"></script>
+	<script type="text/javascript" src="//demo.blacklabel.pl/js/colorpicker.js"></script>
+
+
+	<script type="text/javascript" src="/static/scripts/annotations.js"></script>
+
+	<script type="text/javascript" src="/static/scripts/demo.js"></script>
+
+	
+	</body>
+</html>
