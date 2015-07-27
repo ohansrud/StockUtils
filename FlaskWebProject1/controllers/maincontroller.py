@@ -1,13 +1,19 @@
 from flask import render_template, make_response
 from FlaskWebProject1 import app
 
+#@app.after_request
+#def after_request(response):
+#    response.headers.add('Access-Control-Allow-Origin', '*')
+#    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+#    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+#    return response
 
 # routing for basic pages (pass routing onto the Angular app)
 @app.route('/')
 @app.route('/about/')
 @app.route('/chart/')
 def basic_pages(**kwargs):
-    return make_response(open('FlaskWebProject1/templates/index.html').read())
+    return render_template('index.html')
 
 # routing for templates (pass routing onto the Angular app)
 @app.route('/templates/<template_name>', methods=['GET'])
@@ -19,9 +25,9 @@ def get_template(template_name):
 #def rest_pages(model_name, item_id=None):
 #    return make_response(open('FlaskWebProject1/templates/index.html').read())
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
+#@app.errorhandler(404)
+#def page_not_found(e):
+#    return render_template('404.html'), 404
 
 
 

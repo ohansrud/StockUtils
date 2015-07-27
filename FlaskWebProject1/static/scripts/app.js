@@ -16,11 +16,12 @@ function TickerCtrl($scope , $routeParams) {
 
 var app = angular.module("app", ['ngRoute', 'highcharts-ng']);
 //Assign controllers to app
-app.controller("ChartController", ['$scope', '$http' ,ChartController]);
+app.controller("ChartController", ['$scope', '$http', '$routeParams' ,ChartController]);
 //app.controller("TickerCtrl", ['$scope', '$http' ,TickerCtrl]);
 app.controller("MainController", ['$scope', '$http' ,MainController]);
 
 //Assign routing
+
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 		$routeProvider
 		.when('/', {
@@ -31,17 +32,31 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 			templateUrl: '/templates/chart.html',
 			controller: ChartController
 		})
-		.when('/chart/', {
+			/*
+		.when('/chart', {
 			templateUrl: '/templates/chart.html',
 			controller: ChartController
-		});
-			/*
+		})*/
 		.otherwise({
 			templateUrl: '/templates/home.html',
 			controller: MainController
 		});
-		*/
+
 		//$locationProvider.html5Mode(true);
 }]);
 
-
+app.run([
+  '$rootScope',
+  function($rootScope) {
+    // see what's going on when the route tries to change
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {
+      // next is an object that is the route that we are starting to go to
+      // current is an object that is the route where we are currently
+		try{
+			//var currentPath = current.originalPath;
+      		var nextPath = next.originalPath;
+			console.log(nextPath);
+		}catch(e){}
+    });
+  }
+]);
