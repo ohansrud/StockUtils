@@ -17,7 +17,7 @@ function TickerCtrl($scope , $routeParams) {
 var app = angular.module("app", ['ngRoute', 'highcharts-ng']);
 //Assign controllers to app
 app.controller("ChartController", ['$scope', '$http', '$routeParams' ,ChartController]);
-//app.controller("TickerCtrl", ['$scope', '$http' ,TickerCtrl]);
+app.controller("ScanController", ['$scope', '$http', '$routeParams' ,ScanController]);
 app.controller("MainController", ['$scope', '$http' ,MainController]);
 
 //Assign routing
@@ -31,6 +31,10 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 		.when('/chart/:ticker', {
 			templateUrl: '/templates/chart.html',
 			controller: ChartController
+		})
+		.when('/scan/', {
+			templateUrl: '/templates/scan.html',
+			controller: ScanController
 		})
 			/*
 		.when('/chart', {

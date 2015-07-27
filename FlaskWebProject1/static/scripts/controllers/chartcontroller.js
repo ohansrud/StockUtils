@@ -2,13 +2,14 @@ function ChartController($scope, $routeParams ) {
     $scope.ticker = $routeParams.ticker;
     $scope.loading = true;
 
+    $scope.backtester = {};
     $scope.getchartdata = function(){
         //console.log($scope.chartConfig);
         //$scope.chartConfig.series[0].data.unshift([1426118400,10, 15, 8, 9]);
         //$scope.chartConfig.loading = true;
         $scope.loading = true;
         $.ajax({
-            url: '/json/'+$scope.ticker,
+            url: '/api/getchartdata/'+$scope.ticker,
             //data: JSON.stringify({ 'id': '{{title}}' }),
             type: 'GET',
             beforeSend: function () {
@@ -371,7 +372,7 @@ function ChartController($scope, $routeParams ) {
 
     $scope.getannotations = function(){
         $.ajax({
-            url: '/getannotations/'+$scope.title,
+            url: '/api/getannotations/'+$scope.title,
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
@@ -404,7 +405,7 @@ function ChartController($scope, $routeParams ) {
         //$scope.$apply();
 
         $.ajax({
-            url: '/saveannotations/'+$scope.title,
+            url: '/api/saveannotations/'+$scope.title,
             data: JSON.stringify({ 'annotations': $scope.annotations }),
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
@@ -416,5 +417,31 @@ function ChartController($scope, $routeParams ) {
 
     $scope.removeannotations = function(){
         $scope.annotations = [];
+    }
+
+    $scope.backtest = function(){
+        $.ajax({
+            url: '/api/backtest/'+$scope.backtester +'/'+$scope.ticker,
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                console.log(data);
+               /*  $.each(data, function(e,o){
+
+                    $scope.findings = o;
+                });
+
+
+                $scope.scanning = false;
+                $scope.$apply();
+
+                $.each(data.Annotations, function(e,o){
+                    $scope.annotations.push(o);
+
+
+
+                */
+            }
+        });
     }
 }

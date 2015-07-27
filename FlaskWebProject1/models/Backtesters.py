@@ -21,12 +21,12 @@ def backtester_doublecross(item):
     cash = 10000
     stocks = 0   
         
-    cash = s.backtest_doublecross(cash)
-    print("Cash: " + str(cash) + ". Profit: " + str(cash-10000))
-    profit.append(item + ": " + str(cash-10000))
-    print("---------------------------------------")
+    return s.backtest_doublecross(cash)
+    #print("Cash: " + str(cash) + ". Profit: " + str(cash-10000))
+    #profit.append(item + ": " + str(cash-10000))
+    #print("---------------------------------------")
 
-    return profit
+    #return profit
 
 def backtester_rsi(item):
     profit = []

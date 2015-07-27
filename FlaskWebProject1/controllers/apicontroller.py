@@ -5,10 +5,11 @@ from FlaskWebProject1 import app
 import json as j
 import sys
 from FlaskWebProject1.models.StockQuote import StockQuote as st
-from FlaskWebProject1.models.Scanners import scanner_doublecross, scanner_rsi
+from FlaskWebProject1.models.Scanners import scanner_doublecross, scanner_rsi, scanner_obv
+from FlaskWebProject1.models.BacktestingResult import BacktestingTrade
 import time
 
-@app.route('/getannotations/<ticker>', methods=['GET'])
+@app.route('/api/getannotations/<ticker>', methods=['GET'])
 def getannotations(ticker):
     try:
         with open('FlaskWebProject1/data/'+ticker+'.json') as data_file:
@@ -23,7 +24,7 @@ def getannotations(ticker):
         return resp\
 
 
-@app.route('/saveannotations/<ticker>', methods=['POST'])
+@app.route('/api/saveannotations/<ticker>', methods=['POST'])
 def saveannotations(ticker):
     try:
         a = request.json['annotations']
@@ -39,8 +40,8 @@ def saveannotations(ticker):
         return resp
 
 
-@app.route('/json/<ticker>')
-def json(ticker):
+@app.route('/api/getchartdata/<ticker>')
+def getchartdata(ticker):
     today = datetime.today()
     day = timedelta(days=1)
     year = timedelta(days=(365*2))
@@ -56,6 +57,49 @@ def json(ticker):
         tuples = [tuple(x) for x in subset.values]
 
         resp = jsonify(result=tuples)
+        resp.status_code = 200
+
+        return resp
+    except ValueError:
+        data=sys.exc_info()[0]
+    except:
+        data=sys.exc_info()[0]
+        resp = jsonify(error=data)
+        resp.status_code = 500
+
+        return resp
+
+@app.route('/api/scan/<scanner>')
+def scan(scanner):
+    try:
+        if(scanner == "RSI70"):
+            result = scanner_rsi()
+        elif(scanner == "Doublecross"):
+            result = scanner_doublecross()
+        elif(scanner == "OBV"):
+            result = scanner_obv()
+        resp = jsonify(result=result)
+        resp.status_code = 200
+
+        return resp
+    except ValueError:
+        data=sys.exc_info()[0]
+    except:
+        data=sys.exc_info()[0]
+        resp = jsonify(error=data)
+        resp.status_code = 500
+
+        return resp
+
+@app.route('/api/backtest/<method>/<ticker>')
+def backtest(method, ticker):
+    try:
+        result = BacktestingTrade('100', '120', '2014-01-01', '2014-02-02', '10000', '10')
+        #if(method == "doublecross"):
+        #    result = backtester_doublecross(ticker)
+        #elif (method == "rsi"):
+        #    result = backtester_rsi(ticker)
+        resp = jsonify(result=result)
         resp.status_code = 200
 
         return resp

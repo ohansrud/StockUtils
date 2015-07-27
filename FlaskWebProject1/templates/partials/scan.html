@@ -1,0 +1,15 @@
+{% raw %}
+<select data-ng-options="s for s in scanners" data-ng-model="scanner"></select>
+<button class="btn btn-success" ng-click="scan()">Scan</button>
+<div ng-show="scanning">Scanning...</div>
+
+<div ng-show="findings.length ==0">No Signals found</div>
+
+<div ng-show="findings.length > 0">Signals found:
+    <ul ng-repeat="f in findings">
+        <li>
+            <a ng-href='/#/chart/{{f}}' target="_blank">{{f}}</a>
+        </li>
+    </ul>
+</div>
+{% endraw %}

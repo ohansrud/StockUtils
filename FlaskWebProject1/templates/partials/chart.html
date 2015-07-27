@@ -1,7 +1,11 @@
+{% raw %}
 <button class="btn btn-success" ng-click="getchartdata()">Get Chart</button>
 <button class="btn btn-primary" ng-click="addannotations()">Add</button>
 <button class="btn btn-primary" ng-click="removeannotations()">Remove</button>
 <button class="btn btn-primary" ng-click="saveannotations()">Save</button>
 <button class="btn btn-primary" ng-click="getannotations()">Get</button>
 
+<select data-ng-options="s for s in ['doublecross', 'rsi']" data-ng-model="backtester"></select>
+<button class="btn btn-success" ng-click="backtest()">Backtest</button>
 <highchart ng-init="getchartdata()" id="chart1" config="chartConfig" class="span10"></highchart>
+{% endraw %}
