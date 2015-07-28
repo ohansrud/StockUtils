@@ -46,7 +46,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 			controller: MainController
 		});
 
-		//$locationProvider.html5Mode(true);
+		$locationProvider.html5Mode(true);
 }]);
 
 app.run([

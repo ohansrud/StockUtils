@@ -2,6 +2,7 @@
 from mock import MagicMock, Mock
 import unittest
 from FlaskWebProject1.models.StockQuote import StockQuote as st
+import numpy as np
 
 class ProductionClass(object):
     data = "Test";
@@ -31,6 +32,9 @@ class TestCase(unittest.TestCase):
 
         s = st("TEL.OL", "2014-01-01", "2014-02-02")
         test = "sdadsa"
+        
+
+        
 
 
 

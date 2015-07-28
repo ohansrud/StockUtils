@@ -5,10 +5,11 @@ from FlaskWebProject1 import app
 @app.route('/')
 @app.route('/about/')
 @app.route('/chart/')
+@app.route('/chart/<ticker>/')
 def basic_pages(**kwargs):
     return render_template('index.html')
 
 # routing for templates (pass routing onto the Angular app)
 @app.route('/templates/<template_name>', methods=['GET'])
 def get_template(template_name):
-  return render_template('partials/{}'.format(template_name))
+    return render_template('partials/{}'.format(template_name))
