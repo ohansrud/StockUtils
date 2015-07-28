@@ -1,8 +1,9 @@
 function ChartController($scope, $routeParams ) {
     $scope.ticker = $routeParams.ticker;
     $scope.loading = true;
-
+    $scope.loading_backtest = false;
     $scope.backtester = {};
+    $scope.backtesting = [];
     $scope.getchartdata = function(){
         //console.log($scope.chartConfig);
         //$scope.chartConfig.series[0].data.unshift([1426118400,10, 15, 8, 9]);
@@ -32,6 +33,9 @@ function ChartController($scope, $routeParams ) {
                     volume.push(
                         [Date.parse(o[0]), o[5]]
                     );
+                    $scope.chartConfig.series[1].data = volume;
+                    $scope.chartConfig.series[1].id = "Volume";
+                    $scope.chartConfig.series[1].name = "Volume";
                 });
 
                 //$scope.chartConfig.series.push({
@@ -49,7 +53,13 @@ function ChartController($scope, $routeParams ) {
     $scope.toggleLoading = function () {
         this.chartConfig.loading = !this.chartConfig.loading
     }
-
+    $scope.groupingUnits = [[
+                'week',                         // unit name
+                [1]                             // allowed multiples
+            ], [
+                'month',
+                [1, 2, 3, 4, 6]
+            ]];
     $scope.chartConfig = {
         options: {
             subtitle: {
@@ -130,7 +140,30 @@ function ChartController($scope, $routeParams ) {
                 type: 'datetime',
             }],
             yAxis: [
-
+                {
+                labels: {
+                    align: 'right',
+                    x: -3
+                },
+                title: {
+                    text: 'OHLC'
+                },
+                height: '60%',
+                lineWidth: 2
+            }, {
+                labels: {
+                    align: 'right',
+                    x: -3
+                },
+                title: {
+                    text: 'Volume'
+                },
+                top: '65%',
+                height: '35%',
+                offset: 0,
+                lineWidth: 2
+            }
+                /*
                 { // Primary yAxis
 
                     min: 0,
@@ -168,6 +201,7 @@ function ChartController($scope, $routeParams ) {
                     opposite: true
 
                 }
+                */
             ],
 
             legend: {
@@ -322,10 +356,30 @@ function ChartController($scope, $routeParams ) {
             {
                 id: $scope.ticker,
                 name: 'Notifications',
-                data: [], //$scope.chartdata,//[[1426204800000,10, 15, 8, 9]],
+                data: [],
                 type: 'candlestick',
                 yAxis: 0,
-                color: '#80a3ca'
+
+                dataGrouping: {
+                    units: $scope.groupingUnits
+                }
+            },
+            {
+                type: 'column',
+                name: 'Volume',
+                data: [],
+                yAxis: 1,
+                color: '#80a3ca',
+                dataGrouping: {
+                    units: $scope.groupingUnits
+                }
+            },
+            {
+                type: 'flags',
+                name: 'Backtesting flags',
+                data: [],
+                onSeries: $scope.ticker,
+                shape: 'squarepin'
             }
         ],
 
@@ -419,28 +473,36 @@ function ChartController($scope, $routeParams ) {
         $scope.annotations = [];
     }
 
+
+
     $scope.backtest = function(){
+        $scope.loading_backtest = true;
         $.ajax({
             url: '/api/backtest/'+$scope.backtester +'/'+$scope.ticker,
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
-                console.log(data);
-               /*  $.each(data, function(e,o){
+                $scope.loading_backtest = false;
+                $scope.backtesting = data.result.trades;
+                $scope.chartConfig.series[2].data = [];
+                //Add flags
+                $.each($scope.backtesting, function(e,o){
+                    $scope.chartConfig.series[2].data.push(
+                    {
+                        x: Date.parse(o.buy_date),
+                        title: 'Buy:' + o.buy_price
+                    });
 
-                    $scope.findings = o;
+                    $scope.chartConfig.series[2].data.push(
+                    {
+                        x: Date.parse(o.sell_date),
+                        title: 'Sell:' + o.sell_price
+                    });
+
+
                 });
 
-
-                $scope.scanning = false;
                 $scope.$apply();
-
-                $.each(data.Annotations, function(e,o){
-                    $scope.annotations.push(o);
-
-
-
-                */
             }
         });
     }

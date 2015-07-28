@@ -7,6 +7,7 @@ from datetime import date, timedelta
 import math
 import sys
 from FlaskWebProject1.models.BacktestingResult import BacktestingTrade, BacktestingResult
+from pprint import pprint
 
 class StockQuote(object):
     """description of class"""
@@ -163,36 +164,49 @@ class StockQuote(object):
         self.slowk_drops_under_80()
 
         i = 0
-        print(len(self.df))
+        #print(len(self.df))
         while i < len(self.df):
         #for i in range(0, len(self.df)):            
             try:
                 if self.df['doublecross'][i] == 1:
                     buy_date = self.df.index[i]
-                    #Kjop
+                    #Kjøp
                     buy_price = self.df['close'][i]
-                    #a = self.atr[i]
-                    #stop_loss = buy_price - a*3
+                    a = self.atr[i]
+                    stop_loss = buy_price - a*5
+                    take_profit = buy_price + a*5
 
                     stocks = math.floor(cash / buy_price)
                     cash = cash%buy_price
-                    print(self.df.index[i])
+                    print(buy_date)
                     print("Buy: " + str(buy_price))
                     
                     a = i
                     while self.df['slowk_drops_under_80'][a] == 0:
-                       if a== len(self.df):
-                           sell_date = self.df.index[a]
-                           break
-                       a = a+1
+                        if self.df['close'][i] < stop_loss or self.df['low'][i] < stop_loss:
+                            print("Stop loss!")
+                            break
+
+                        if self.df['close'][i] > stop_loss or self.df['high'][i] > stop_loss:
+                            print("Take profit!")
+                            break
+                        a = a+1
+                        if a == len(self.df):
+                            a=a-1
+                            break
                     i=a
-                    sell_date = self.df.index[a-1]
+                    sell_date = self.df.index[i]
                     #while self.df['close'][i] > stop_loss or self.df['slowk_drops_under_80'][i] == 0:
-                     #   i = i+1  
+                     #   i = i+1
                     #Selg Aksjer
-                    sell_price = self.df['close'][i]
+                    if self.df['close'][i] < stop_loss or self.df['low'][i] < stop_loss:
+                        sell_price = stop_loss
+                    elif self.df['close'][i] > stop_loss or self.df['high'][i] > stop_loss:
+                        sell_price = take_profit
+                    else:
+                        sell_price = self.df['close'][i]
                     cash = cash + (sell_price*stocks)
-                    result.trades.append(BacktestingTrade(buy_price, sell_price, buy_date, sell_date, cash, stocks))
+                    result.trades.append(BacktestingTrade(buy_price, sell_price, buy_date, sell_date, cash, stocks).serialize)
                     print(self.df.index[i])
                     print("Sell: " + str(sell_price))
                     print("Profit: " + str((sell_price*stocks)-(buy_price*stocks)))
@@ -206,7 +220,8 @@ class StockQuote(object):
                         break
                 i=i+1   
             except:
-                print(sys.exc_info()[0])
+                error = sys.exc_info()
+                pprint(error)
                 i=i+1
         #Selg aksjer hvis det er noe igjen
         if stocks > 0:
@@ -223,38 +238,54 @@ class StockQuote(object):
         return result
     
     def backtest_rsi(self, cash):
-
+        result = BacktestingResult()
         self.scan_rsi_over_70()
         self.scan_rsi_under_50()
-        stocks = 0
+        #stocks = 0
         i = 0
         while i < len(self.df):
         #for i in range(0, len(self.df)):            
             try:
                 if self.df['rsi_over_70'][i] == 1:
                     
-                    #Kjop
+                    #Kjøp
+                    buy_date = self.df.index[i]
                     buy_price = self.df['close'][i]
-                    #a = self.atr[i]
-                    #stop_loss = buy_price - a*3
+                    a = self.atr[i]
+                    stop_loss = buy_price - a*3
+                    take_profit = buy_price + a*5
 
                     stocks = math.floor(cash / buy_price)
                     cash = cash%buy_price
-                    print(self.df.index[i])
+                    print(buy_date)
                     print("Buy: " + str(buy_price))
                     
                     a = i
                     while self.df['rsi_under_50'][a] == 0:
-                       a = a+1  
-                       if a== len(self.df):
-                           break
+                        if self.df['close'][i] < stop_loss or self.df['low'][i] < stop_loss:
+                            print("Stop loss!")
+                            break
+                        if self.df['close'][i] > stop_loss or self.df['high'][i] > stop_loss:
+                            print("Take profit!")
+                            break
+                        a = a+1
+                        if a == len(self.df):
+                            a=a-1
+                            break
                     i=a
                     #while self.df['close'][i] > stop_loss or self.df['slowk_drops_under_80'][i] == 0:
                      #   i = i+1  
                     #Selg Aksjer
-                    sell_price = self.df['close'][i]
+                    sell_date = self.df.index[i]
+                    if self.df['close'][i] < stop_loss or self.df['low'][i] < stop_loss:
+                        sell_price = stop_loss
+                    elif self.df['close'][i] > stop_loss or self.df['high'][i] > stop_loss:
+                        sell_price = take_profit
+                    else:
+                        sell_price = self.df['close'][i]
                     cash = cash + (sell_price*stocks)
-                    
+                    result.trades.append(BacktestingTrade(buy_price, sell_price, buy_date, sell_date, cash, stocks).serialize)
+
                     print(self.df.index[i])
                     print("Sell: " + str(sell_price))
                     print("Profit: " + str((sell_price*stocks)-(buy_price*stocks)))
@@ -268,19 +299,22 @@ class StockQuote(object):
                         break
                 i=i+1   
             except:
-                pass
+                error = sys.exc_info()
+                pprint(error)
+                i=i+1
         #Selg aksjer hvis det er noe igjen
         if stocks > 0:
             sell_price = self.df['close'][i-1]
             cash = cash + (sell_price*stocks)
                     
             print(self.df.index[i-1])
+            result.trades.append(BacktestingTrade(buy_price, sell_price, buy_date, sell_date, cash, stocks))
             print("Sell: " + str(sell_price))
             print("Profit: " + str((sell_price*stocks)-(buy_price*stocks)))
             stocks = 0 
             print("Cash: " + str(cash))
             print(" --------- ") 
-        return cash
+        return result
 
     def scan_obv(self):
 

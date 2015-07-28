@@ -46,9 +46,9 @@ def backtester_rsi(item):
     cash = 10000
     stocks = 0   
         
-    cash = s.backtest_rsi(cash)
-    print("Cash: " + str(cash) + ". Profit: " + str(cash-10000))
-    profit.append(item + ": " + str(cash-10000))
-    print("---------------------------------------")
+    return s.backtest_rsi(cash)
+    #print("Cash: " + str(cash) + ". Profit: " + str(cash-10000))
+    #profit.append(item + ": " + str(cash-10000))
+    #print("---------------------------------------")
 
-    return profit
+    #return profit

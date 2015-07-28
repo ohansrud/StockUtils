@@ -6,8 +6,8 @@ import json as j
 import sys
 from models.StockQuote import StockQuote as st
 from FlaskWebProject1.models.Scanners import scanner_doublecross, scanner_rsi, scanner_obv
-from FlaskWebProject1.models.BacktestingResult import BacktestingTrade
-import time
+from FlaskWebProject1.models.BacktestingResult import BacktestingResult, BacktestingTrade
+from FlaskWebProject1.models.Backtesters import backtester_doublecross, backtester_rsi
 
 @app.route('/api/getannotations/<ticker>', methods=['GET'])
 def getannotations(ticker):
@@ -94,15 +94,15 @@ def scan(scanner):
 @app.route('/api/backtest/<method>/<ticker>')
 def backtest(method, ticker):
     try:
-        result = BacktestingTrade('100', '120', '2014-01-01', '2014-02-02', '10000', '10')
-        #if(method == "doublecross"):
-        #    result = backtester_doublecross(ticker)
-        #elif (method == "rsi"):
-        #    result = backtester_rsi(ticker)
-        resp = jsonify(result=result)
+        if(method == "doublecross"):
+            result = backtester_doublecross(ticker)
+        elif (method == "rsi"):
+            result = backtester_rsi(ticker)
+        resp = jsonify(result=result.serialize)
         resp.status_code = 200
 
         return resp
+
     except ValueError:
         data=sys.exc_info()[0]
     except:

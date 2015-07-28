@@ -7,5 +7,18 @@
 
 <select data-ng-options="s for s in ['doublecross', 'rsi']" data-ng-model="backtester"></select>
 <button class="btn btn-success" ng-click="backtest()">Backtest</button>
+<i ng-show="loading_backtest" class="fa fa-refresh fa-spin">Backtesting....</i>
 <highchart ng-init="getchartdata()" id="chart1" config="chartConfig" class="span10"></highchart>
+
+<div>
+
+    <ul>
+        <li ng-repeat="trade in backtesting">
+            Buy: {{trade.buy_date}} - {{trade.buy_price}}
+            Sell: {{trade.sell_date}} - {{trade.sell_price}}
+            Cash: {{trade.cash}} - Profit: {{trade.profit}}
+        </li>
+    </ul>
+</div>
+
 {% endraw %}

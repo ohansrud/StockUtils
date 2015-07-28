@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import datetime, date
 
-class BacktestingTrade():
+class BacktestingTrade(object):
      #buy_date = datetime
     #sell_date = ""
     #buy_price = 0
@@ -15,7 +15,25 @@ class BacktestingTrade():
         self.cash = str(cash)
         self.profit = str((sell_price*stocks)-(buy_price*stocks))
 
-class BacktestingResult():
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+           'buy_date'         : self.buy_date,
+           'buy_price'         : self.buy_price,
+           'sell_date'         : self.sell_date,
+           'sell_price'         : self.sell_price,
+           'cash'         : self.cash,
+           'profit'         : self.profit,
+       }
 
+class BacktestingResult(object):
     def __init__(self):
         self.trades = []
+
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+           'trades'         : self.trades
+       }
