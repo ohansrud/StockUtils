@@ -4,7 +4,7 @@ from flask import render_template, Response, jsonify, request
 from FlaskWebProject1 import app
 import json as j
 import sys
-from models.StockQuote import StockQuote as st
+from FlaskWebProject1.models.StockQuote import StockQuote as st
 from FlaskWebProject1.models.Scanners import scanner_doublecross, scanner_rsi, scanner_obv
 from FlaskWebProject1.models.BacktestingResult import BacktestingResult, BacktestingTrade
 from FlaskWebProject1.models.Backtesters import backtester_doublecross, backtester_rsi
@@ -51,6 +51,9 @@ def getchartdata(ticker):
         s = st(ticker, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
         s.df['index'] = s.df.index
         subset = s.df[['index', 'open', 'high', 'low', 'close', 'volume']]
+
+        #s.wma_obv()
+        s.scan_wma_obv_sloping_up()
 
         s.df['index'] = s.df.index
 

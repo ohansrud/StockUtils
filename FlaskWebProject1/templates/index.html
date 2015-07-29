@@ -37,15 +37,12 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('home') }}">Home</a></li>
-                    <li><a href="{{ url_for('about') }}">About</a></li>
-                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
                 </ul>
             </div>
         </div>
     </div>
 	<div class="container body-content">
-        {% block content %}{% endblock %}
+        <div id="content" class="container main" ng-view>
         <hr />
         <footer>
             <p>&copy; {{ year }} - My Flask Application</p>
@@ -81,13 +78,6 @@
 			<div class="footer-right">
 				<span>&copy; 2013 AngularFlask</span>
 			</div>
-		</footer>
-	</div>-->
-    <div class="container body-content">
-        {% block content %}{% endblock %}
-        <hr />
-        <footer>
-            <p>&copy; {{ year }} - My Flask Application</p>
-        </footer>
-    </div>
+		</footer>-->
+	</div>
 </body>

@@ -39,17 +39,13 @@ class StockQuote(object):
         self.atr = abstract.ATR(df2)
         self.obv = abstract.OBV(df2) 
         self.rsi = abstract.RSI(df2)
-        #self.wma = abstract.WMA(df2, 233)
-        
 
         #kombinerer to dataframes
         self.df = pd.merge(df2, pd.DataFrame(self.macd), left_index=True, right_index=True, how='outer')
-
         self.df = pd.merge(self.df, self.stoch, left_index=True, right_index=True, how='outer')
         self.df = pd.merge(self.df, pd.DataFrame(self.atr), left_index=True, right_index=True, how='outer')
         self.df = pd.merge(self.df, pd.DataFrame(self.obv), left_index=True, right_index=True, how='outer')
         self.df = pd.merge(self.df, pd.DataFrame(self.rsi), left_index=True, right_index=True, how='outer')
-        #self.df = pd.merge(self.df, pd.DataFrame(self.wma), left_index=True, right_index=True, how='outer')
     
     #Scanner etter tilfeller der Slow K krysser med Slow D
     def stoch_crossover(self):
@@ -125,6 +121,15 @@ class StockQuote(object):
                 pass
 
         return self.df
+
+    def wma_obv(self):
+
+        df2 = self.df
+        df2.rename(columns={'obv': 'close'})
+        try:
+            self.wma_obv = abstract.WMA(df2, 233)
+        except:
+            pprint(sys.exc_info())
 
     def slowk_drops_under_80(self):
         self.df["slowk_drops_under_80"] = 0
@@ -408,13 +413,44 @@ class StockQuote(object):
                 pass
         return self.df
 
+    def scan_wma_obv_sloping_up(self):
+        self.df["both_sloping_up"] = 0
+        self.df["wma_obv_sloping_up"] = 0
+        self.df["obv_sloping_up"] = 0
+
+        wma = abstract.WMA(self.df, 233)
+
+        df2 = self.df
+        df2.rename(columns={'obv': 'close'})
+        wma_obv = abstract.WMA(df2, 233)
+
+        for i in range(0, len(wma_obv)):
+            try:
+                a = wma_obv[i]
+                b = wma_obv[i+1]
+                c = wma[i]
+                d = wma[i+1]
+                #k krysser under 50
+                if a <  b:
+                    print("OBV Slope up")
+                    self.df['wma_obv_sloping_up'][i+1] = 1
+
+                if c <  d:
+                    print("Price Slope up")
+                    self.df['obv_sloping_up'][i+1] = 1
+
+                if a < b and c <  d:
+                    print("Both Slope up")
+                    self.df['both_sloping_up'][i+1] = 1
+            except:
+                pass
+
+        return self.df
+
+
     def scan_macd(self):
         try:
-            
-            #self.stoch_crossover()
             self.macd_crossover()
-            #self.doublecross()
-            #s.slowk_drops_under_80()
             l = len(self.df)
             h = self.df.iloc[l-1]['doublecross']
             h1 = self.df.iloc[l-2]['doublecross']
