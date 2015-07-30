@@ -69,10 +69,12 @@ class StockQuote(object):
                         if k < d and k2 > d2:
                             self.df['array_D_cross_down'][i] = 1
                 except:
-                    print(sys.exc_info())
+                    pass
+                    #pprint(sys.exc_info())
                     
         except:
-            print(sys.exc_info())
+            pass
+            #print(sys.exc_info())
         return self.df
 
     #Scanner etter tilfeller der macd krysser med signallinjen
@@ -161,177 +163,15 @@ class StockQuote(object):
                 pass
         return None
 
-    def backtest_doublecross(self, cash):
-        result = BacktestingResult()
-        self.stoch_crossover()
-        self.macd_crossover()
-        self.doublecross()
-        self.slowk_drops_under_80()
-
-        i = 0
-        #print(len(self.df))
-        while i < len(self.df):
-        #for i in range(0, len(self.df)):            
-            try:
-                if self.df['doublecross'][i] == 1:
-                    buy_date = self.df.index[i]
-                    #Kjøp
-                    buy_price = self.df['close'][i]
-                    a = self.atr[i]
-                    stop_loss = buy_price - a*5
-                    take_profit = buy_price + a*5
-
-                    stocks = math.floor(cash / buy_price)
-                    cash = cash%buy_price
-                    print(buy_date)
-                    print("Buy: " + str(buy_price))
-                    
-                    a = i
-                    while self.df['slowk_drops_under_80'][a] == 0:
-                        if self.df['close'][i] < stop_loss or self.df['low'][i] < stop_loss:
-                            print("Stop loss!")
-                            break
-
-                        if self.df['close'][i] > stop_loss or self.df['high'][i] > stop_loss:
-                            print("Take profit!")
-                            break
-                        a = a+1
-                        if a == len(self.df):
-                            a=a-1
-                            break
-                    i=a
-                    sell_date = self.df.index[i]
-                    #while self.df['close'][i] > stop_loss or self.df['slowk_drops_under_80'][i] == 0:
-                     #   i = i+1
-                    #Selg Aksjer
-                    if self.df['close'][i] < stop_loss or self.df['low'][i] < stop_loss:
-                        sell_price = stop_loss
-                    elif self.df['close'][i] > stop_loss or self.df['high'][i] > stop_loss:
-                        sell_price = take_profit
-                    else:
-                        sell_price = self.df['close'][i]
-                    cash = cash + (sell_price*stocks)
-                    result.trades.append(BacktestingTrade(buy_price, sell_price, buy_date, sell_date, cash, stocks).serialize)
-                    print(self.df.index[i])
-                    print("Sell: " + str(sell_price))
-                    print("Profit: " + str((sell_price*stocks)-(buy_price*stocks)))
-                    stocks = 0 
-                    print("Cash: " + str(cash))
-                    print(" --------- ")    
-
-                    #Hvis det ikke er mer penger igjen
-                    if(cash<=0):
-                        print("No funds!")
-                        break
-                i=i+1   
-            except:
-                error = sys.exc_info()
-                pprint(error)
-                i=i+1
-        #Selg aksjer hvis det er noe igjen
-        if stocks > 0:
-            sell_price = self.df['close'][i-1]
-            cash = cash + (sell_price*stocks)
-                    
-            print(self.df.index[i-1])
-            result.trades.append(BacktestingTrade(buy_price, sell_price, buy_date, sell_date, cash, stocks))
-            print("Sell: " + str(sell_price))
-            print("Profit: " + str((sell_price*stocks)-(buy_price*stocks)))
-            stocks = 0 
-            print("Cash: " + str(cash))
-            print(" --------- ") 
-        return result
-    
-    def backtest_rsi(self, cash):
-        result = BacktestingResult()
-        self.scan_rsi_over_70()
-        self.scan_rsi_under_50()
-        #stocks = 0
-        i = 0
-        while i < len(self.df):
-        #for i in range(0, len(self.df)):            
-            try:
-                if self.df['rsi_over_70'][i] == 1:
-                    
-                    #Kjøp
-                    buy_date = self.df.index[i]
-                    buy_price = self.df['close'][i]
-                    a = self.atr[i]
-                    stop_loss = buy_price - a*3
-                    take_profit = buy_price + a*5
-
-                    stocks = math.floor(cash / buy_price)
-                    cash = cash%buy_price
-                    print(buy_date)
-                    print("Buy: " + str(buy_price))
-                    
-                    a = i
-                    while self.df['rsi_under_50'][a] == 0:
-                        if self.df['close'][i] < stop_loss or self.df['low'][i] < stop_loss:
-                            print("Stop loss!")
-                            break
-                        if self.df['close'][i] > stop_loss or self.df['high'][i] > stop_loss:
-                            print("Take profit!")
-                            break
-                        a = a+1
-                        if a == len(self.df):
-                            a=a-1
-                            break
-                    i=a
-                    #while self.df['close'][i] > stop_loss or self.df['slowk_drops_under_80'][i] == 0:
-                     #   i = i+1  
-                    #Selg Aksjer
-                    sell_date = self.df.index[i]
-                    if self.df['close'][i] < stop_loss or self.df['low'][i] < stop_loss:
-                        sell_price = stop_loss
-                    elif self.df['close'][i] > stop_loss or self.df['high'][i] > stop_loss:
-                        sell_price = take_profit
-                    else:
-                        sell_price = self.df['close'][i]
-                    cash = cash + (sell_price*stocks)
-                    result.trades.append(BacktestingTrade(buy_price, sell_price, buy_date, sell_date, cash, stocks).serialize)
-
-                    print(self.df.index[i])
-                    print("Sell: " + str(sell_price))
-                    print("Profit: " + str((sell_price*stocks)-(buy_price*stocks)))
-                    stocks = 0 
-                    print("Cash: " + str(cash))
-                    print(" --------- ")    
-
-                    #Hvis det ikke er mer penger igjen
-                    if(cash<=0):
-                        print("No funds!")
-                        break
-                i=i+1   
-            except:
-                error = sys.exc_info()
-                pprint(error)
-                i=i+1
-        #Selg aksjer hvis det er noe igjen
-        if stocks > 0:
-            sell_price = self.df['close'][i-1]
-            cash = cash + (sell_price*stocks)
-                    
-            print(self.df.index[i-1])
-            result.trades.append(BacktestingTrade(buy_price, sell_price, buy_date, sell_date, cash, stocks))
-            print("Sell: " + str(sell_price))
-            print("Profit: " + str((sell_price*stocks)-(buy_price*stocks)))
-            stocks = 0 
-            print("Cash: " + str(cash))
-            print(" --------- ") 
-        return result
-
-    def scan_obv(self):
-
+    def scan_wma_obv(self):
+        self.scan_wma_obv_sloping_up()
         try:
            
             l = len(self.df)
-            wma1 = self.df.iloc[l]['wma']
-            wma2 = self.df.iloc[l]['wma']
-            obv1 = self.df.iloc[l-1]['obv']
-            obv2 = self.df.iloc[l-1]['obv']
+            wma1 = self.df.iloc[l-2]['both_sloping_up']
+            wma2 = self.df.iloc[l-1]['both_sloping_up']
 
-            if wma1 < obv1 and wma2 > obv2:
+            if wma1 == 0 and wma2 == 1:
                 print("Found")
                 return True
             else:
@@ -415,8 +255,6 @@ class StockQuote(object):
 
     def scan_wma_obv_sloping_up(self):
         self.df["both_sloping_up"] = 0
-        self.df["wma_obv_sloping_up"] = 0
-        self.df["obv_sloping_up"] = 0
 
         wma = abstract.WMA(self.df, 233)
 
@@ -426,27 +264,17 @@ class StockQuote(object):
 
         for i in range(0, len(wma_obv)):
             try:
-                a = wma_obv[i]
-                b = wma_obv[i+1]
-                c = wma[i]
-                d = wma[i+1]
-                #k krysser under 50
-                if a <  b:
-                    print("OBV Slope up")
-                    self.df['wma_obv_sloping_up'][i+1] = 1
-
-                if c <  d:
-                    print("Price Slope up")
-                    self.df['obv_sloping_up'][i+1] = 1
+                a = wma_obv[i-1]
+                b = wma_obv[i]
+                c = wma[i-1]
+                d = wma[i]
 
                 if a < b and c <  d:
-                    print("Both Slope up")
-                    self.df['both_sloping_up'][i+1] = 1
+                    self.df['both_sloping_up'][i] = 1
             except:
                 pass
 
         return self.df
-
 
     def scan_macd(self):
         try:
@@ -458,6 +286,26 @@ class StockQuote(object):
             #h2 = self.df.iloc[l-3]['doublecross']
             #h3 = self.df.iloc[l-4]['doublecross']
             if h == 1 or h1 ==1: #or h2 == 1 or h3 == 1:
+                print("Found")
+                return True
+            else:
+                print("No Symbol Found")
+                return False
+        except:
+            print("Error")
+            return False
+
+    def scan_stoploss(self):
+        try:
+            self.slowk_drops_under_80()
+            l = len(self.df)
+            prev_close = self.df.iloc[l-2]['close']
+            low = self.df.iloc[l-1]['low']
+            atr3 = self.atr[l-1] * 3
+            stoploss = prev_close -atr3
+            slowk_under_80 = self.df['slowk_drops_under_80'][l-1]
+
+            if low < stoploss or slowk_under_80 == 1:
                 print("Found")
                 return True
             else:

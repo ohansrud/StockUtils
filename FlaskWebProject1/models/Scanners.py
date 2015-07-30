@@ -29,13 +29,12 @@ def scanner_obv():
 
         try:
             s = st(item, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
-            t = s.scan_obv()
+            t = s.scan_wma_obv()
             if t == True:
                 found.append(item)
         except:
             print("Import Error")
-    
-        
+
         print("---------------------------------------")
 
     return found
@@ -78,6 +77,28 @@ def scanner_rsi():
         try:
             s = st(item, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
             t = s.scan_rsi()
+            if t == True:
+                found.append(item)
+        except:
+            print("Import Error")
+        print("---------------------------------------")
+
+    return found
+
+def scanner_stoploss():
+    found = []
+    for item in portfolio_OL:
+
+        print(item)
+        today = datetime.today()
+        day = timedelta(days=1)
+        year = timedelta(days=365)
+        start = today-year
+        end = today-day
+
+        try:
+            s = st(item, str(start.strftime('%Y-%m-%d')), str(end.strftime('%Y-%m-%d')))
+            t = s.scan_stoploss()
             if t == True:
                 found.append(item)
         except:

@@ -5,9 +5,9 @@ from FlaskWebProject1 import app
 import json as j
 import sys
 from FlaskWebProject1.models.StockQuote import StockQuote as st
-from FlaskWebProject1.models.Scanners import scanner_doublecross, scanner_rsi, scanner_obv
+from FlaskWebProject1.models.Scanners import *
 from FlaskWebProject1.models.BacktestingResult import BacktestingResult, BacktestingTrade
-from FlaskWebProject1.models.Backtesters import backtester_doublecross, backtester_rsi
+from FlaskWebProject1.models.Backtester import *
 
 @app.route('/api/getannotations/<ticker>', methods=['GET'])
 def getannotations(ticker):
@@ -52,9 +52,6 @@ def getchartdata(ticker):
         s.df['index'] = s.df.index
         subset = s.df[['index', 'open', 'high', 'low', 'close', 'volume']]
 
-        #s.wma_obv()
-        s.scan_wma_obv_sloping_up()
-
         s.df['index'] = s.df.index
 
         tuples = [tuple(x) for x in subset.values]
@@ -81,6 +78,8 @@ def scan(scanner):
             result = scanner_doublecross()
         elif(scanner == "OBV"):
             result = scanner_obv()
+        elif(scanner == "stoploss"):
+            result = scanner_stoploss()
         resp = jsonify(result=result)
         resp.status_code = 200
 
@@ -98,9 +97,11 @@ def scan(scanner):
 def backtest(method, ticker):
     try:
         if(method == "doublecross"):
-            result = backtester_doublecross(ticker)
+            b = Backtester_DoubleCross(ticker)
+            result = b.result
         elif (method == "rsi"):
-            result = backtester_rsi(ticker)
+            b = Backtester_RSI(ticker)
+            result = b.result
         resp = jsonify(result=result.serialize)
         resp.status_code = 200
 
