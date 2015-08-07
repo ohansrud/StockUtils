@@ -4,6 +4,7 @@ from FlaskWebProject1 import app
 # routing for basic pages (pass routing onto the Angular app)
 @app.route('/')
 @app.route('/scan/')
+@app.route('/portfolio/')
 @app.route('/chart/')
 @app.route('/chart/<ticker>')
 def basic_pages(**kwargs):

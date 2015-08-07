@@ -10,17 +10,18 @@
     <script src="/static/scripts/jquery-1.10.2.js"></script>
     <script src="/static/scripts/bootstrap.js"></script>
     <script src="/static/scripts/respond.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.js"></script>
-    <script src="//code.highcharts.com/stock/highstock.src.js"></script>
+    <script src="/static/scripts/angular.min.js"></script>
+    <script src="/static/scripts/highstock.js"></script>
     <script src="/static/scripts/annotations.js"></script>
+    <!---->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
 
-    <script src="//rawgithub.com/pablojim/highcharts-ng/master/src/highcharts-ng.js"></script>
+    <script src="/static/scripts/highcharts-ng.js"></script>
 
     <script src="/static/scripts/controllers/maincontroller.js"></script>
     <script src="/static/scripts/controllers/chartcontroller.js"></script>
 	<script src="/static/scripts/controllers/scancontroller.js"></script>
-
+    <script src="/static/scripts/controllers/portfoliocontroller.js"></script>
 
     <script src="/static/scripts/app.js"></script>
 </head>
@@ -40,47 +41,17 @@
                     <li><a href="/">Home</a></li>
                     <li><a href="/scan">Scan</a></li>
                     <li><a href="/chart">Chart</a></li>
+                    <li><a href="/portfolio">Chart</a></li>
                 </ul>
             </div>
         </div>
     </div>
 	<div class="container body-content">
         <div id="content" class="container main" ng-view>
-        <hr />
-        <footer>
-            <p>&copy; {{ year }} - My Flask Application</p>
-        </footer>
-    </div>
-	<!--
-	<div id="header" class="header navbar navbar-static-top">
-		<div class="navbar-inner">
-			<div class="container">
-				<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-				</button>
-				<a class="brand" href="/">AngularFlask</a>
-				<div class="nav-collapse collapse">
-					<ul class="nav pull-right">
-						<li class="">
-							<a href="/">Home</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="container page">
-		<div id="content" class="container main" ng-view>
-		</div>
-
-		<hr>
-		<footer id="footer" class="footer">
-			<div class="footer-left">
-				<a href="/about">About</a> |
-				<a href="/">Home</a>
-			</div>
-			<div class="footer-right">
-				<span>&copy; 2013 AngularFlask</span>
-			</div>
-		</footer>-->
+            <hr />
+            <footer>
+                <p>&copy; {{ year }} - My Flask Application</p>
+            </footer>
+        </div>
 	</div>
 </body>

@@ -1,9 +1,13 @@
 {% raw %}
+
 <button class="btn btn-success" ng-click="getchartdata()">Get Chart</button>
 <button class="btn btn-primary" ng-click="addannotations()">Add</button>
 <button class="btn btn-primary" ng-click="removeannotations()">Remove</button>
 <button class="btn btn-primary" ng-click="saveannotations()">Save</button>
 <button class="btn btn-primary" ng-click="getannotations()">Get</button>
+<button class="btn btn-primary" ng-click="getpeaks()">Get peaks</button>
+
+
 
 <select data-ng-options="s for s in ['doublecross', 'rsi']" data-ng-model="backtester"></select>
 <button class="btn btn-success" ng-click="backtest()">Backtest</button>
@@ -20,5 +24,32 @@
         </li>
     </ul>
 </div>
+<div>
 
+    <ul>
+        <li ng-repeat="a in annotations">
+            {{a}}
+        </li>
+    </ul>
+</div>
+<div style="top: 315px; left: 1194px; display: block; position: absolute" id="highcharts-edit-annotation" ng-show="showing">
+			<div ng-click="showing = false;">x</div>
+			<div class="highchart-edit-annotation-row without-title">
+					<span>Edit</span>
+					<label for="highcharts-change-fill visible" class="label-colorPicker">Set fill color </label>
+					<div style="background-color: rgb(231, 240, 249);" type="text" id="highcharts-change-fill" class="menu-btn colorPicker"></div>
+			</div>
+			<div class="highchart-edit-annotation-row without-title">
+					<label for="highcharts-change-border visible label-colorPicker" class="label-colorPicker">Set border color </label>
+					<div style="background-color: rgb(102, 136, 170);" type="text" id="highcharts-change-border" class="menu-btn colorPicker"></div>
+			</div>
+			<div style="display: none;" class="highchart-edit-annotation-row with-title">
+					<span class="highcharts-title-edit-box">Edit text</span>
+					<input id="highcharts-change-title" class="menu-btn" type="text">
+			</div>
+			<div class="highchart-edit-annotation-row">
+					<a id="highcharts-remove-annotation">Remove</a>
+					<button ng-click="showing = false;">OK</button>
+			</div>
+	</div>
 {% endraw %}

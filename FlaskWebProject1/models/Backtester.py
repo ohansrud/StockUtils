@@ -28,12 +28,12 @@ class Backtester(object):
     def backtest(self):
         i = 0
         cash=10000
-        while i < len(self.s.df):
+        while i < len(self.s.df-1):
             try:
-                #Look for bBuy Signal
+                #Look for Buy Signal
                 if self.s.df[self.buy_signal][i] == 1:
                     buy_date = self.s.df.index[i]
-                    #Kjøp
+                    #Buy
                     buy_price = self.s.df['close'][i]
 
                     stocks = math.floor(cash / buy_price)

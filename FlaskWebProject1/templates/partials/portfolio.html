@@ -1,0 +1,14 @@
+{% raw %}
+<button class="btn btn-success" ng-click="getportfolio()">Get Portfolio</button>
+<div ng-show="scanning">Scanning...</div>
+
+<div ng-show="positions.length ==0">No Positions found</div>
+
+<div ng-show="positions.length > 0">Positions in Portfolio:
+    <ul ng-repeat="p in positions">
+        <li>
+            {{p.ticker}} - {{p.buy_date}} - {{p.buy_price}}
+        </li>
+    </ul>
+</div>
+{% endraw %}
