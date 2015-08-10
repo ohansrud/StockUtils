@@ -483,6 +483,7 @@ function ChartController($scope, $routeParams ) {
 
 
 
+
     }
     $scope.removeannotations = function(){
         $scope.annotations = [];
