@@ -4,10 +4,21 @@ import math
 from decimal import *
 
 class Portfolio(object):
-    def __init__(self, start_cash):
+    def __init__(self, name, start_cash):
+        self.name = name
         self.open_positions = []
         self.closed_positions = []
         self.cash = start_cash
+
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+           'name'         : self.name,
+           'open_positions'         : self.open_positions,
+           'closed_positions'         : self.closed_positions,
+           'cash'         : self.cash,
+       }
 
     def buy(self, ticker, amount):
         buy_price = y.get_price(ticker)
@@ -42,7 +53,7 @@ class Position(object):
 
     def getprofit(self):
         value = y.get_price(self.ticker)
-        return Decimal(value) - Decimal(self.buy_price)
+        return (Decimal(value) - Decimal(self.buy_price)) * self.amount
 
     def sell(self):
         self.sell_date = datetime.today()

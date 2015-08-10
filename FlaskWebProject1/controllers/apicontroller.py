@@ -8,6 +8,7 @@ from FlaskWebProject1.models.StockQuote import StockQuote as st
 from FlaskWebProject1.models.Scanners import *
 from FlaskWebProject1.models.BacktestingResult import BacktestingResult, BacktestingTrade
 from FlaskWebProject1.models.Backtester import *
+from FlaskWebProject1.models.Portfolio import Portfolio
 
 @app.route('/api/getannotations/<ticker>', methods=['GET'])
 def getannotations(ticker):
@@ -103,6 +104,62 @@ def backtest(method, ticker):
             b = Backtester_RSI(ticker)
             result = b.result
         resp = jsonify(result=result.serialize)
+        resp.status_code = 200
+
+        return resp
+
+    except ValueError:
+        data=sys.exc_info()[0]
+    except:
+        data=sys.exc_info()[0]
+        resp = jsonify(error=data)
+        resp.status_code = 500
+
+        return resp
+
+@app.route('/api/portfolio/<name>', methods=['GET'])
+def get_portfolio(method, ticker):
+    try:
+        p = Portfolio("Test", 1000);
+        resp = jsonify(result=p.serialize)
+        resp.status_code = 200
+
+        return resp
+
+    except ValueError:
+        data=sys.exc_info()[0]
+    except:
+        data=sys.exc_info()[0]
+        resp = jsonify(error=data)
+        resp.status_code = 500
+
+        return resp
+
+@app.route('/api/portfolio', methods=['POST'])
+def create_portfolio(method, ticker):
+    try:
+        p = Portfolio("Test", 1000);
+        resp = jsonify(result=p.serialize)
+        resp.status_code = 200
+
+        return resp
+
+    except ValueError:
+        data=sys.exc_info()[0]
+    except:
+        data=sys.exc_info()[0]
+        resp = jsonify(error=data)
+        resp.status_code = 500
+
+        return resp
+
+
+@app.route('/api/portfolio/buy', methods=['POST'])
+def buy_position(ticker, amount):
+    try:
+        p = Portfolio("Test", 1000);
+        p.buy(ticker, amount)
+        resp = jsonify(result="OK")
         resp.status_code = 200
 
         return resp
