@@ -4,7 +4,7 @@ Created on Jul 28, 2015
 @author: ohansrud
 '''
 
-class MyClass(object):
+class Points(object):
     '''
     classdocs
     '''
