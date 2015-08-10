@@ -14,7 +14,9 @@ portfolio_OL = ["ASC.OL","APCL.OL","AFG.OL","AGA.OL","AKA.OL","AKER.OL","AKPS.OL
 "STB.OL","STORM.OL","SUBC.OL","TIL.OL","TEL.OL","TELIO.OL","TGS.OL","SSC.OL","THIN.OL","TOM.OL","TTS.OL","VARDIA.OL","VEI.OL","VIZ.OL","WEIFA.OL","WRL.OL",
 "WBULK.OL","WWASA.OL","WWI.OL","WWIB.OL","XXL.OL","YAR.OL","ZAL.OL","ZONC.OL"]
 
-#portfolio_OL = ["AGA.OL","ABT.OL","AVANCE.OL","FRO.OL","GOGL.OL","HLNG.OL"]
+#portfolio = ["AGA.OL","ABT.OL","AVANCE.OL","FRO.OL","GOGL.OL","HLNG.OL"]
+
+portfolio = ["BAKKA.OL","BIOTEC.OL","SOLV.OL","EVRY.OL","GOGL.OL", "XXL.OL"]
 
 def scanner_obv():
     found = []
@@ -92,7 +94,7 @@ def scanner_stoploss():
         print(item)
         today = datetime.today()
         day = timedelta(days=1)
-        year = timedelta(days=365)
+        year = timedelta(days=31)
         start = today-year
         end = today-day
 

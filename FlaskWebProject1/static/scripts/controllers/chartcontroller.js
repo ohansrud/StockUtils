@@ -1,4 +1,158 @@
+var utils = {
+	getRadius: function(e) {
+		var ann = this,
+			chart = ann.chart,
+			bbox = chart.container.getBoundingClientRect(),
+			x = e.clientX - bbox.left,
+			y = e.clientY - bbox.top,
+			xAxis = chart.xAxis[ann.options.xAxis],
+			yAxis = chart.yAxis[ann.options.yAxis],
+			dx = Math.abs(x - xAxis.toPixels(ann.options.xValue)),
+			dy = Math.abs(y - yAxis.toPixels(ann.options.yValue));
+			radius = parseInt(Math.sqrt(dx * dx + dy * dy), 10);
+		ann.shape.attr({
+			r: radius
+		});
+		return radius;
+	},
+	getRadiusAndUpdate:	function(e) {
+		var r = utils.getRadius.call(this, e);
+		this.update({
+			shape: {
+				params: {
+					r: r,
+					x: -r,
+					y: -r
+				}
+			}
+		});
+	},
+	getPath: function(e) {
+		var ann = this,
+			chart = ann.chart,
+			bbox = chart.container.getBoundingClientRect(),
+			x = e.clientX - bbox.left,
+			y = e.clientY - bbox.top,
+			xAxis = chart.xAxis[ann.options.xAxis],
+			yAxis = chart.yAxis[ann.options.yAxis],
+			dx = x - xAxis.toPixels(ann.options.xValue),
+			dy = y - yAxis.toPixels(ann.options.yValue);
+
+		var path = ["M", 0, 0, 'L', Math.round(parseInt(dx, 10)), Math.round(parseInt(dy, 10))];
+		ann.shape.attr({
+			d: path
+		});
+
+		return path;
+	},
+	getPathAndUpdate: function(e) {
+		var ann = this,
+			chart = ann.chart,
+			path = utils.getPath.call(ann, e),
+			xAxis = chart.xAxis[ann.options.xAxis],
+			yAxis = chart.yAxis[ann.options.yAxis],
+			x = xAxis.toValue(path[4] + xAxis.toPixels(ann.options.xValue)) ,
+			y = yAxis.toValue(path[5] + yAxis.toPixels(ann.options.yValue)) ;
+
+		this.update({
+			xValueEnd: x,
+			yValueEnd: y,
+			shape: {
+				params: {
+					d: path
+				}
+			}
+		});
+	},
+	getRect: function(e) {
+		var ann = this,
+			chart = ann.chart,
+			bbox = chart.container.getBoundingClientRect(),
+			x = e.clientX - bbox.left,
+			y = e.clientY - bbox.top,
+			xAxis = chart.xAxis[ann.options.xAxis],
+			yAxis = chart.yAxis[ann.options.yAxis],
+			sx = xAxis.toPixels(ann.options.xValue),
+			sy = yAxis.toPixels(ann.options.yValue),
+			dx = x - sx,
+			dy = y - sy,
+			w = Math.round(dx) + 1,
+			h = Math.round(dy) + 1,
+			ret = {};
+
+		ret.x = w < 0 ? w : 0;
+		ret.width = Math.abs(w);
+		ret.y = h < 0 ? h : 0;
+		ret.height = Math.abs(h);
+
+		ann.shape.attr({
+			x: ret.x,
+			y: ret.y,
+			width: ret.width,
+			height: ret.height
+		});
+		return ret;
+	},
+	getRectAndUpdate: function(e) {
+		var rect = utils.getRect.call(this, e);
+		this.update({
+			shape: {
+				params: rect
+			}
+		});
+	},
+	getText: function(e) {
+		// do nothing
+	},
+	showInput: function(e) {
+		var ann = this,
+				chart = ann.chart,
+				index = chart.annotationInputIndex = chart.annotationInputIndex ? chart.annotationInputIndex : 1,
+				input =  document.createElement('span'),
+				button;
+
+		input.innerHTML = '<input type="text" class="annotation-' + index + '" placeholder="Add text"><button class=""> Done </button>';
+		input.style.position = 'absolute';
+		input.style.left = e.pageX + 'px';
+		input.style.top = e.pageY + 'px';
+
+		document.body.appendChild(input);
+		input.querySelectorAll("input")[0].focus();
+		button = input.querySelectorAll("button")[0];
+		button.onclick = function() {
+				var parent = this.parentNode;
+
+				ann.update({
+						title: {
+								text: parent.querySelectorAll('input')[0].value
+						}
+				});
+				parent.parentNode.removeChild(parent);
+		};
+		chart.annotationInputIndex++;
+	}
+}
+
 function ChartController($scope, $routeParams ) {
+    $scope.getPath= function(e) {
+		var ann = this,
+			chart = ann.chart,
+			bbox = chart.container.getBoundingClientRect(),
+			x = e.clientX - bbox.left,
+			y = e.clientY - bbox.top,
+			xAxis = chart.xAxis[ann.options.xAxis],
+			yAxis = chart.yAxis[ann.options.yAxis],
+			dx = x - xAxis.toPixels(ann.options.xValue),
+			dy = y - yAxis.toPixels(ann.options.yValue);
+
+		var path = ["M", 0, 0, 'L', Math.round(parseInt(dx, 10)), Math.round(parseInt(dy, 10))];
+		ann.shape.attr({
+			d: path
+		});
+
+		return path;
+	};
+    $scope.annotations = [];
     $scope.ticker = $routeParams.ticker;
     $scope.loading = true;
     $scope.loading_backtest = false;
@@ -73,11 +227,6 @@ function ChartController($scope, $routeParams ) {
                                 $scope.status("Drag!"+ e.xAxis[0].min + " to " +e.xAxis[0].max);
                                 $scope.$apply();
                             }
-                    /*
-                            click: function (e) {
-                                $scope.newAnnotation(e);
-                            }
-*/
                         },
                 resetZoomButton: {
                     position: {
@@ -162,47 +311,7 @@ function ChartController($scope, $routeParams ) {
                 height: '35%',
                 offset: 0,
                 lineWidth: 2
-            }
-                /*
-                { // Primary yAxis
-
-                    min: 0,
-                    allowDecimals: false,
-                    title: {
-                        //text: 'number of notification',
-                        style: {
-                            color: '#80a3ca'
-                        }
-                    },
-                    labels: {
-                        format: '{value}',
-                        style: {
-                            color: '#80a3ca'
-                        }
-                    }
-
-
-                },
-                { // Secondary yAxis
-                    min: 0,
-                    allowDecimals: false,
-                    title: {
-                        //text: 'price',
-                        style: {
-                            color: '#c680ca'
-                        }
-                    },
-                    labels: {
-                        format: '{value}',
-                        style: {
-                            color: '#c680ca'
-                        }
-                    },
-                    opposite: true
-
-                }
-                */
-            ],
+            }],
 
             legend: {
                 enabled: false
@@ -215,143 +324,80 @@ function ChartController($scope, $routeParams ) {
             },
 
             loading: $scope.loading,
-            /*
-            tooltip: {
-                crosshairs: [
-                    {
-                        width: 1,
-                        dashStyle: 'dash',
-                        color: '#898989'
-                    },
-                    {
-                        width: 1,
-                        dashStyle: 'dash',
-                        color: '#898989'
-                    }
-                ],
-                headerFormat: '<div class="header">{point.key}</div>',
-                pointFormat: '<div class="line"><div class="circle" style="background-color:{series.color};float:left;margin-left:10px!important;clear:left;"></div><p class="country" style="float:left;">{series.name}</p><p>{point.y:,.0f} {series.tooltipOptions.valueSuffix} </p></div>',
-                borderWidth: 1,
-                borderRadius: 5,
-                borderColor: '#a4a4a4',
-                shadow: false,
-                useHTML: true,
-                percentageDecimals: 2,
-                backgroundColor: "rgba(255,255,255,.7)",
-                style: {
-                    padding: 0
-                },
-                shared: true
-
-            },
-            */
             useHighStocks: true,
             annotationsOptions: {
-                enabledButtons: true,
-                /*
-                buttonsOffsets: [0, 0],
                 buttons: [
                     {
-                        size: 20,
-                        symbol: { // button symbol options
-                        shape: 'rect', // shape, taken from Highcharts.symbols
-                        size: 12,
-                        style: {
-                            'stroke-width':  2,
-                            'stroke': 'black',
-                            fill: 'red',
-                            zIndex: 121
-                        }
 
-                    },
-                        states: { // states for button
-                        selected: {
-                            fill: '#9BD'
+                        annotationEvents: {
+                            step:  $scope.getPath,
+                            stop: utils.getPathAndUpdate
                         },
-                        hover: {
-                            fill: '#9BD'
+                        annotation: {
+                            anchorX: 'left',
+                            anchorY: 'top',
+                            xAxis: 0,
+                            yAxis: 0,
+                            shape: {
+                                type: 'path',
+                                params: {
+                                    d: ['M', 0, 0, 'L', 10, 10],
+                                    fill: 'rgba(255,0,0,0.4)',
+                                    stroke: 'black'
+                                }
+                            },
+                            events: {
+                                click: function(e){
+                                    $scope.showing = false;
+                                    $scope.$apply();
+                                    console.log(e);
+                                },
+                                dblclick: function(e){
+                                    this.destroy();
+                                },
+                                contextmenu: function(e){
+                                    //alert("Menu!");
+                                    //$('#constext-menu-div').css({top: e.chartY, left: e.chartX});
+	                        	    //$('#constext-menu-div').show();
+                                    $scope.showing = true;
+                                    $scope.$apply();
+	                        	    console.log(e);
+                                    e.preventDefault()
+                                }
+                            }
+                        },
+                        symbol: {
+                            shape: 'line',
+                            size: 12,
+                            style: {
+                                'stroke-width':  2,
+                                'stroke': 'black',
+                                fill: 'red',
+                                zIndex: 121
+                            }
+                        },
+                        style: {
+                            fill: 'black',
+                            stroke: 'blue',
+                            strokeWidth: 2
+                        },
+                        size: 12,
+                        states: {
+                            selected: {
+                                fill: '#9BD'
+                            },
+                            hover: {
+                                fill: '#9BD'
+                            }
                         }
-                    },
-                    annotationEvents: {
-                        //start: $scope.annotateStep,
-                        step: $scope.annotateStep, // to be called during mouse drag for new annotation
-                        stop: $scope.annotateStop  // to be called after mouse up / release
-                    },
-
-                    annotation: { // standard annotation options, used for new annotation
-                        linkedTo: $scope.title,
-                        xValueEnd: 1413331200000,
-                        yValueEnd: 136,
-                        //xValueEnd: 0,
-                        //yValueEnd: 0,
-                        anchorX: 'left',
-                        anchorY: 'top',
-                        xAxis: 0,
-                        yAxis: 0,
-                        shape: {
-                            type: 'path',
-                        }
-                    },
 
                     }
 
                 ]
-                */
-                    /*
-                    annotationEvents: {
-                        step: $scope.callback, // to be called during mouse drag for new annotation
-                        //stop: callback  // to be called after mouse up / release
-                    },
 
-                    symbol: { // button symbol options
-                        shape: 'rect', // shape, taken from Highcharts.symbols
-                        size: 12,
-                        style: {
-                            'stroke-width':  2,
-                            'stroke': 'black',
-                            fill: 'red',
-                            zIndex: 121
-                        }
-                    },
-
-                    states: { // states for button
-                        selected: {
-                            fill: '#9BD'
-                        },
-                        hover: {
-                            fill: '#9BD'
-                        }
-                    },
-                    style: { // button style itself
-                        fill: 'black',
-                        stroke: 'blue',
-                        strokeWidth: 2,
-                    },
-                    size: 12, // button size
-
-
-                }]
-*/
+              }
             },
-            annotations: $scope.annotations
-                /*
-            [{
-                linkedTo: $scope.title,
-                xValue: 1413331200000,
-                yValue: 136,
-                xValueEnd: 1413763200000,
-                yValueEnd: 140,
-                //allowDragY: false,
-                //allowDragX: false,
-                //anchorX: "left",
-                //anchorY: "top",
-                shape: {
-                    type: 'path'
-                }
-            }]*/
-            ,
-
-        },
+        annotations: $scope.annotations,
         series: [
             {
                 id: $scope.ticker,
@@ -384,49 +430,11 @@ function ChartController($scope, $routeParams ) {
         ],
 
 
-      //  ]
-/*
-        options: {
-            chart: {
-                type: 'candlestick',
-                zoomType: 'x'
-            }
-        },
-        series: [{
-            type : 'candlestick',
-            name : 'Stock Price',
-            data: [ 1437479072, 15, 12, 8, 7],
-            dataGrouping : {
-                    units : [
-                        [
-                            'week', // unit name
-                            [1] // allowed multiples
-                        ], [
-                            'month',
-                            [1, 2, 3, 4, 6]
-                        ]
-                    ]
-                }
-        }],
-        title: {
-            text: 'Hello'
-        },
-        xAxis: {currentMin: 0, currentMax: 10, minRange: 1},
-        loading: false,
-        useHighStocks: true,
-        /*
-        annotations: [{
-            xValue: 4,
-            yValue: 125,
-            title: {
-                text: "Annotated chart!"
-        }
-      }]*/
-    }
 
+    }
     $scope.getannotations = function(){
         $.ajax({
-            url: '/api/getannotations/'+$scope.title,
+            url: '/api/getannotations/'+$scope.ticker,
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
@@ -435,31 +443,37 @@ function ChartController($scope, $routeParams ) {
 
                 });
                 $scope.$apply();
+                $('.highcharts-container').parent().highcharts().redrawAnnotations();
             }
         });
     }
-
     $scope.saveannotations = function(){
         var a = $('.highcharts-container').parent().highcharts().annotations.allItems;
-        $.each(a, function(e,o){
+
+        $scope.annotations = [];
+         $.each(a, function(e,o){
 
             $scope.annotations.push(
                 {
-                    linkedTo: 'TEL.OL',
-                    xValue: o.options.xValue,
-                    yValue: o.options.yValue,
-                    xValueEnd: o.options.xValueEnd,
-                    yValueEnd: o.options.yValueEnd,
+                    anchorX: "left",
+                    anchorY: "top",
+                    linkedTo: $scope.ticker,
+                    xValue: Math.round(o.options.xValue),
+                    yValue: Math.round(o.options.yValue),
+                    xValueEnd: Math.round(o.options.xValueEnd),
+                    yValueEnd: Math.round(o.options.yValueEnd),
                     shape: {
                         type: 'path'
                     }
                 });
         });
+
         //$scope.annotations = a;
         //$scope.$apply();
 
+
         $.ajax({
-            url: '/api/saveannotations/'+$scope.title,
+            url: '/api/saveannotations/'+$scope.ticker,
             data: JSON.stringify({ 'annotations': $scope.annotations }),
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
@@ -467,14 +481,14 @@ function ChartController($scope, $routeParams ) {
             }
         });
 
-    }
 
+
+    }
     $scope.removeannotations = function(){
         $scope.annotations = [];
+        $scope.$apply();
+        $('.highcharts-container').parent().highcharts().redrawAnnotations();
     }
-
-
-
     $scope.backtest = function(){
         $scope.loading_backtest = true;
         $.ajax({
@@ -506,4 +520,29 @@ function ChartController($scope, $routeParams ) {
             }
         });
     }
+    $scope.getpeaks = function(){
+        $.ajax({
+            url: '/api/getpeaks/'+$scope.ticker,
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $scope.chartConfig.series[2].data = [];
+
+                //Add flags
+                $.each(data.results, function(e,o){
+                    console.log(e);
+                    console.log(o);
+                    $scope.chartConfig.series[2].data.push({
+                            x: Date.parse(o),
+                            title: 'V'
+                        })
+
+                });
+
+                $scope.$apply();
+            }
+        });
+    }
+    $scope.showing = false;
+
 }

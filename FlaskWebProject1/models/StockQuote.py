@@ -1,12 +1,7 @@
-import numpy as np
 from talib import abstract
 import ystockquote as y
 import pandas as pd
-from pprint import pprint
-from datetime import date, timedelta
-import math
 import sys
-from FlaskWebProject1.models.BacktestingResult import BacktestingTrade, BacktestingResult
 from pprint import pprint
 
 class StockQuote(object):
@@ -18,7 +13,6 @@ class StockQuote(object):
     obv = []
     rsi = []
     df = []
-    #wma = []
 
     def __init__(self, ticker, start, end):
 
@@ -147,21 +141,6 @@ class StockQuote(object):
             except:
                 pass
         return self.df
-
-    def turning_points(self):
-        self.df["max"] = 0
-        self.df["min"] = 0
-        for i in range(0, len(self.df)):
-            try:
-                o = self.df.iloc[i]['open']
-                h = self.df.iloc[i]['high']
-                l = self.df.iloc[i]['low']
-                c = self.df.iloc[i]['close']
-                self.df['max'][i] = max([o,h,c])
-                self.df['min'][i] = min([o,l,c])
-            except:
-                pass
-        return None
 
     def scan_wma_obv(self):
         self.scan_wma_obv_sloping_up()
@@ -301,7 +280,7 @@ class StockQuote(object):
             l = len(self.df)
             prev_close = self.df.iloc[l-2]['close']
             low = self.df.iloc[l-1]['low']
-            atr3 = self.atr[l-1] * 3
+            atr3 = self.atr[l-1] * 5
             stoploss = prev_close -atr3
             slowk_under_80 = self.df['slowk_drops_under_80'][l-1]
 
@@ -317,7 +296,7 @@ class StockQuote(object):
 
     #Scan for bullish candlestick patterns:     Bullish Engulfing (2)Piercing Pattern (2)Bullish Harami (2) Hammer (1)Inverted Hammer (1)Morning Star (3)Bullish Abandoned Baby (3) 
 
-    def scan2(self):
+    def scan_cdlbullish(self):
         try:
             cdl=[]# = None
             cdl.append(abstract.CDLENGULFING(self.df))        
@@ -341,9 +320,9 @@ class StockQuote(object):
             print("Error")
             return False
 
-    def scan3(self):
+    def scan_cdl_bearish(self):
         try:
-            cdl=[]# = None
+            cdl=[]
             cdl.append(abstract.CDLENGULFING(self.df))        
             cdl.append(abstract.CDLPIERCING(self.df))       
             cdl.append(abstract.CDLHARAMI(self.df))       

@@ -1,6 +1,5 @@
 from datetime import date, timedelta, datetime
 import ystockquote as y
-import math
 from decimal import *
 
 class Portfolio(object):

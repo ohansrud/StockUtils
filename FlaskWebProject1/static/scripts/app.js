@@ -19,6 +19,7 @@ var app = angular.module("app", ['ngRoute', 'highcharts-ng']);
 app.controller("ChartController", ['$scope', '$http', '$routeParams' ,ChartController]);
 app.controller("ScanController", ['$scope', '$http', '$routeParams' ,ScanController]);
 app.controller("MainController", ['$scope', '$http' ,MainController]);
+app.controller("PortfolioController", ['$scope', '$http' ,PortfolioController]);
 
 //Assign routing
 
@@ -36,11 +37,11 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 			templateUrl: '/templates/scan.html',
 			controller: ScanController
 		})
-			/*
-		.when('/chart', {
-			templateUrl: '/templates/chart.html',
-			controller: ChartController
-		})*/
+
+		.when('/portfolio/', {
+			templateUrl: '/templates/portfolio.html',
+			controller: PortfolioController
+		})
 		.otherwise({
 			templateUrl: '/templates/home.html',
 			controller: MainController
