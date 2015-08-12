@@ -3,6 +3,7 @@ import ystockquote as y
 import pandas as pd
 import sys
 from pprint import pprint
+from datetime import datetime, timedelta
 
 class StockQuote(object):
     """description of class"""
@@ -14,9 +15,17 @@ class StockQuote(object):
     rsi = []
     df = []
 
-    def __init__(self, ticker, start, end):
+    def __init__(self, ticker, start_days, end_days):
 
-        i = y.get_historical_prices(ticker, start, end)
+        today = datetime.today()
+        day = timedelta(days=start_days)
+        year = timedelta(days=end_days)
+        start = today-year
+        end = today-day
+        start_str = str(start.strftime('%Y-%m-%d'))
+        end_str = str(end.strftime('%Y-%m-%d'))
+
+        i = y.get_historical_prices(ticker, start_str, end_str)
 
         #Lag Pandas DataFrame
         df = pd.DataFrame(i)
@@ -33,6 +42,9 @@ class StockQuote(object):
         self.atr = abstract.ATR(df2)
         self.obv = abstract.OBV(df2) 
         self.rsi = abstract.RSI(df2)
+        self.ma_200 = abstract.MA(df2, 200)
+
+
 
         #kombinerer to dataframes
         self.df = pd.merge(df2, pd.DataFrame(self.macd), left_index=True, right_index=True, how='outer')
@@ -40,6 +52,7 @@ class StockQuote(object):
         self.df = pd.merge(self.df, pd.DataFrame(self.atr), left_index=True, right_index=True, how='outer')
         self.df = pd.merge(self.df, pd.DataFrame(self.obv), left_index=True, right_index=True, how='outer')
         self.df = pd.merge(self.df, pd.DataFrame(self.rsi), left_index=True, right_index=True, how='outer')
+        self.df = pd.merge(self.df, pd.DataFrame(self.ma_200), left_index=True, right_index=True, how='outer')
     
     #Scanner etter tilfeller der Slow K krysser med Slow D
     def stoch_crossover(self):
@@ -58,10 +71,12 @@ class StockQuote(object):
                     #k krysser under d
                     if k > d and k2 < d2:
                         self.df['array_K_cross_down'][i] = 1
+                        l2 = self.df['array_K_cross_down'][i]
                     else:
                         #d krysser under k
                         if k < d and k2 > d2:
                             self.df['array_D_cross_down'][i] = 1
+                            g2 = self.df['array_D_cross_down'][i]
                 except:
                     pass
                     #pprint(sys.exc_info())
@@ -94,9 +109,27 @@ class StockQuote(object):
                 pass
 
         return self.df
-    
-    #Scanner etter tilfeller der macd_crossover skjer 1-4 dager etter 
-    #stochastic crossover
+
+    # Scanner etter tilfeller der prisen er høyere enn ma_200
+    def price_higher_than_ma_200(self):
+        self.df["price_higher_than_ma_200"] = 0
+
+        for i in range(0, len(self.df)):
+            try:
+                ma = self.df.iloc[i]['ma_200']
+                close = self.df.iloc[i]['close']
+
+                #k krysser under d
+                if close > ma:
+                    self.df['price_higher_than_ma_200'][i] = 1
+            except:
+                pass
+
+        return self.df
+    '''
+    Scanner etter tilfeller der macd_crossover skjer 1-4 dager etter
+    stochastic crossover
+    '''
     def doublecross(self):
         self.df["doublecross"] = 0
 
@@ -129,7 +162,8 @@ class StockQuote(object):
 
     def slowk_drops_under_80(self):
         self.df["slowk_drops_under_80"] = 0
-        for i in range(0, len(self.df)):            
+        self.df["test"] = 0
+        for i in range(0, len(self.df)):
             try:
                 slowk = self.df.iloc[i]['slowk']
                 slowk2 = self.df.iloc[i+1]['slowk']
@@ -141,6 +175,21 @@ class StockQuote(object):
             except:
                 pass
         return self.df
+
+    def scan_rsi_over_70(self):
+        self.df["rsi_over_70"] = 0
+        rsi = abstract.RSI(self.df)
+        for i in range(0, len(rsi)):
+            try:
+                a = rsi[i]
+                b = rsi[i+1]
+                #k krysser over 70
+                if a < 70 and b > 70:
+                    self.df['rsi_over_70'][i+1] = 1
+            except:
+                pass
+        return self.df
+
 
     def scan_wma_obv(self):
         self.scan_wma_obv_sloping_up()
@@ -162,14 +211,15 @@ class StockQuote(object):
 
     def scan_doublecross(self):
         try:
-            
             self.stoch_crossover()
             self.macd_crossover()
             self.doublecross()
+            #self.price_higher_than_ma_200()
             #s.slowk_drops_under_80()
             l = len(self.df)
             h = self.df.iloc[l-1]['doublecross']
             h1 = self.df.iloc[l-2]['doublecross']
+            #ma = self.df.iloc[l-1]['price_higher_than_ma_200']
             #h2 = self.df.iloc[l-3]['doublecross']
             #h2 = self.df.iloc[l-3]['doublecross']
             #h3 = self.df.iloc[l-4]['doublecross']
@@ -203,20 +253,6 @@ class StockQuote(object):
         except:
             print("Error")
             return False
-
-    def scan_rsi_over_70(self):
-        self.df["rsi_over_70"] = 0
-        rsi = abstract.RSI(self.df)
-        for i in range(0, len(rsi)):            
-            try:
-                a = rsi[i]
-                b = rsi[i+1]
-                #k krysser over 70
-                if a < 70 and b > 70:
-                    self.df['rsi_over_70'][i+1] = 1
-            except:
-                pass
-        return self.df
 
     def scan_rsi_under_50(self):
         self.df["rsi_under_50"] = 0

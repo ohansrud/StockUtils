@@ -545,5 +545,22 @@ function ChartController($scope, $routeParams ) {
         });
     }
     $scope.showing = false;
+    $scope.amount = 0;
+    $scope.totalprice;
+    $scope.buyposition = function () {
+        $.ajax({
+            url: '/api/portfolio/buy/'+$scope.ticker,
+            data: JSON.stringify({ 'amount': $scope.amount }),
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if(!data.Success){
+                    alert(data['error']);
+                }else{
+                    alert("Added to portfolio");
+                }
+            }
+        });
+    }
 
 }

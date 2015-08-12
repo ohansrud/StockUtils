@@ -1,8 +1,9 @@
 """
 This script runs the FlaskWebProject1 application using a development server.
 """
-from os import environ
+from os import environ, path
 from FlaskWebProject1 import app
+
 
 if __name__ == '__main__':
     HOST = environ.get('SERVER_HOST', 'localhost')
@@ -11,3 +12,4 @@ if __name__ == '__main__':
     #except ValueError:
     PORT = 5000
     app.run(HOST, PORT, debug=True)
+

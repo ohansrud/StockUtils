@@ -4,10 +4,15 @@
 
 <div ng-show="positions.length ==0">No Positions found</div>
 
-<div ng-show="positions.length > 0">Positions in Portfolio:
-    <ul ng-repeat="p in positions">
+<div ng-show="portfolio.open_positions.length < 1">
+    <h2>No Positions in Portfolio</h2>
+</div>
+<div ng-init="getportfolio()" ng-show="portfolio.open_positions.length > 0">
+    <h2>Positions in Portfolio:</h2>
+    <ul ng-repeat="p in portfolio.open_positions">
         <li>
             {{p.ticker}} - {{p.buy_date}} - {{p.buy_price}}
+            <button class="btn btn-success" ng-click="sellposition(p)">Sell</button>
         </li>
     </ul>
 </div>

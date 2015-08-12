@@ -12,6 +12,10 @@
 <select data-ng-options="s for s in ['doublecross', 'rsi']" data-ng-model="backtester"></select>
 <button class="btn btn-success" ng-click="backtest()">Backtest</button>
 <i ng-show="loading_backtest" class="fa fa-refresh fa-spin">Backtesting....</i>
+
+<input ng-model="amount"/>
+<button class="btn btn-primary" ng-click="buyposition()">Buy</button>
+
 <highchart ng-init="getchartdata()" id="chart1" config="chartConfig" class="span10"></highchart>
 
 <div>

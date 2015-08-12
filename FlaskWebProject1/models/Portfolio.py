@@ -9,23 +9,13 @@ class Portfolio(object):
         self.closed_positions = []
         self.cash = start_cash
 
-    @property
-    def serialize(self):
-       """Return object data in easily serializeable format"""
-       return {
-           'name'         : self.name,
-           'open_positions'         : self.open_positions,
-           'closed_positions'         : self.closed_positions,
-           'cash'         : self.cash,
-       }
-
     def buy(self, ticker, amount):
         buy_price = y.get_price(ticker)
         buy_date = datetime.today()
         pos = Position(ticker, buy_date, buy_price, amount)
         self.open_positions.append(pos)
-
-        self.cash = self.cash - (Decimal(buy_price) * amount)
+        buy = Decimal(buy_price.strip(' "')) * Decimal(amount)
+        self.cash = self.cash - buy
 
     def sell(self, ticker):
         position = [i for i in self.open_positions if i.ticker == ticker][0]
@@ -49,6 +39,8 @@ class Position(object):
         self.buy_date = buy_date
         self.buy_price = buy_price
         self.amount = amount
+        self.sell_date = None
+        self.sell_price = 0
 
     def getprofit(self):
         value = y.get_price(self.ticker)
@@ -57,9 +49,7 @@ class Position(object):
     def sell(self):
         self.sell_date = datetime.today()
         self.sell_price = y.get_price(self.ticker)
-        return Decimal(self.sell_price) * self.amount
-
-
+        return Decimal(self.sell_price) * Decimal(self.amount)
 
 
 

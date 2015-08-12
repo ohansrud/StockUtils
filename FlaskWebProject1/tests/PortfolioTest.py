@@ -40,3 +40,12 @@ class TestCase(unittest.TestCase):
 
         d = p.cash
         assert(d<100000)
+
+class TestCase2(unittest.TestCase):
+
+    def serializetest(self):
+        import json as j
+        p = Portfolio("Test", 10000);
+        p.buy("TEL.OL", 100)
+        d = j.dumps(p.open_positions)
+        assert (1==1)

@@ -8,17 +8,12 @@ from pprint import pprint
 class Backtester(object):
     def __init__(self, buy_signal, sell_signal, item):
         self.result = BacktestingResult()
-        self.today = datetime.today()
-        self.day = timedelta(days=1)
-        self.year = timedelta(days=(365*2))
-        self.start = self.today-self.year
-        self.end = self.today-self.day
         self.buy_signal = buy_signal
         self.sell_signal = sell_signal
         self.item = item
 
         try:
-            self.s = st(item, str(self.start.strftime('%Y-%m-%d')), str(self.end.strftime('%Y-%m-%d')))
+            self.s = st(item, 1, 730)
         except:
             print("Import Error")
 
@@ -117,10 +112,15 @@ class Backtester_DoubleCross(Backtester):
         cash = 10000
         stocks = 0
 
+
         self.s.stoch_crossover()
         self.s.macd_crossover()
         self.s.doublecross()
-        self.s.slowk_drops_under_80()
+        #self.s.slowk_drops_under_80()
+
+        func = getattr(self.s, "slowk_drops_under_80")
+        dataframe = func()
+
         self.backtest()
 
 class Backtester_RSI(Backtester):

@@ -2,3 +2,6 @@ Flask<1
 ystockquote<1
 mock<1
 zigzag<1
+jsonpickle<1
+pandas<1
+
