@@ -26,6 +26,8 @@ def saveannotations(ticker):
     try:
         a = request.json['annotations']
         with open('FlaskWebProject1/data/'+ticker+'.json', 'w') as outfile:
+            outfile.seek(0)
+            outfile.truncate()
             j.dump(a, outfile)
         resp = jsonify(Status="Ok")
         resp.status_code = 200
@@ -39,6 +41,7 @@ def saveannotations(ticker):
 
 @app.route('/api/getchartdata/<ticker>')
 def getchartdata(ticker):
+
     try:
         s = st(ticker, 1, 730)
         s.df['index'] = s.df.index
@@ -63,21 +66,18 @@ def getchartdata(ticker):
 
 @app.route('/api/scan/<scanner>')
 def scan(scanner):
+    from FlaskWebProject1.models.Scanners import ScannerDoublecross, ScannerRSI
     try:
         if(scanner == "RSI70"):
-            #result = scanner_rsi()
-            d = ScannerRSI70()
+            d = ScannerRSI()
             result = d.found
         elif(scanner == "Doublecross"):
-            result = scanner_doublecross()
-            #d = ScannerDoublecross()
-            #result = d.found
-        elif(scanner == "OBV"):
-            result = scanner_obv()
-        elif(scanner == "stoploss"):
-            result = scanner_stoploss()
-            #d = ScannerStoploss()
-            #result = d.found
+            d = ScannerDoublecross()
+            result = d.found
+        #elif(scanner == "OBV"):
+            #result = scanner_obv()
+        #elif(scanner == "stoploss"):
+            #result = scanner_stoploss()
         resp = jsonify(result=result)
         resp.status_code = 200
 
@@ -90,7 +90,6 @@ def scan(scanner):
         resp.status_code = 500
 
         return resp
-
 
 @app.route('/api/backtest/<method>/<ticker>')
 def backtest(method, ticker):
@@ -115,28 +114,31 @@ def backtest(method, ticker):
 
         return resp
 
-
 @app.route('/api/portfolio/', methods=['GET'])
 def get_portfolio():
     try:
         with open('FlaskWebProject1/data/portfolio.json') as data_file:
             data = j.load(data_file)
             p = jsonpickle.decode(data)
-        data = jsonpickle.encode(p, unpicklable=False)
-        resp = jsonify(Success=True, portfolio=data)
-        resp.status_code = 200
-
-        return resp
-
-    except ValueError:
-        data=sys.exc_info()[0]
+            jsonstring = jsonpickle.encode(p, unpicklable=False)
     except:
-        data=sys.exc_info()[0]
-        resp = jsonify(error=data)
-        resp.status_code = 500
+        p = Portfolio("Test", 10000);
+        with open('FlaskWebProject1/data/portfolio.json', 'w') as data_file:
+            jsonstring = jsonpickle.encode(p)
+            j.dump(jsonstring, data_file)
+        jsonstring = jsonpickle.encode(p, unpicklable=False)
 
-        return resp
+    resp = jsonify(portfolio=jsonstring)
+    resp.status_code = 200
 
+    return resp
+
+
+    data=sys.exc_info()[0]
+    resp = jsonify(error=data)
+    resp.status_code = 500
+
+    return resp
 
 @app.route('/api/portfolio', methods=['POST'])
 def create_portfolio(method, ticker):
@@ -168,12 +170,6 @@ def buy_position(ticker):
         p = Portfolio("Test", 10000)
         data=sys.exc_info()[0]
 
-    y = [i for i in p.open_positions if i.ticker == ticker]
-
-    if len(y) > 0:
-        resp = jsonify(Success=False, error="Already in portfolio")
-        resp.status_code = 200
-        return resp
     try:
         p.buy(ticker, amount)
         with open('FlaskWebProject1/data/portfolio.json', 'w') as data_file:
@@ -205,20 +201,13 @@ def sell_position(ticker):
         p = Portfolio("Test", 10000)
         data=sys.exc_info()[0]
 
-    y = [i for i in p.open_positions if i.ticker == ticker]
-
-    if len(y) == 0:
-        resp = jsonify(Success=False, error="Ticker not in portfolio")
-        resp.status_code = 200
-        return resp
     try:
         p.sell(ticker)
         with open('FlaskWebProject1/data/portfolio.json', 'w') as data_file:
             jsonstring = jsonpickle.encode(p)
             j.dump(jsonstring, data_file)
 
-        data = jsonpickle.encode(p, unpicklable=False)
-        resp = jsonify(Success=True, portfolio=data)
+        resp = jsonify(result="OK")
         resp.status_code = 200
 
         return resp
@@ -231,3 +220,4 @@ def sell_position(ticker):
         resp.status_code = 500
 
         return resp
+

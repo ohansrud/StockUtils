@@ -23,7 +23,7 @@ class Backtester(object):
     def backtest(self):
         i = 0
         cash=10000
-        while i < len(self.s.df-1):
+        while i < len(self.s.df)-1:
             try:
                 #Look for Buy Signal
                 if self.s.df[self.buy_signal][i] == 1:
@@ -38,7 +38,7 @@ class Backtester(object):
                     #Cannot buy and sell on the same day. Skips to next day to look for exit.
                     i= i+1
                     #Look for exit signal
-                    while i < len(self.s.df):
+                    while i < len(self.s.df)-1:
                         #Set stop loss and take profit +- 5 * atr of previous day
                         atr = self.s.atr[i-1]
                         stop_loss = self.s.df['close'][i-1] - atr * 5
@@ -112,15 +112,10 @@ class Backtester_DoubleCross(Backtester):
         cash = 10000
         stocks = 0
 
-
         self.s.stoch_crossover()
         self.s.macd_crossover()
         self.s.doublecross()
-        #self.s.slowk_drops_under_80()
-
-        func = getattr(self.s, "slowk_drops_under_80")
-        dataframe = func()
-
+        self.s.slowk_drops_under_80()
         self.backtest()
 
 class Backtester_RSI(Backtester):

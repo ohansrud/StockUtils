@@ -134,6 +134,7 @@ var utils = {
 }
 
 function ChartController($scope, $routeParams ) {
+    $scope.currentprice = 0;
     $scope.getPath= function(e) {
 		var ann = this,
 			chart = ann.chart,
@@ -177,6 +178,7 @@ function ChartController($scope, $routeParams ) {
 
                 $.each(data.result, function (e, o) {
                     //console.log(Date.parse(o[0]));
+                    $scope.currentprice = o[4];
                     $scope.chartConfig.series[0].data.push(
                         [Date.parse(o[0]), o[1], o[2], o[3], o[4]]
 
@@ -200,6 +202,7 @@ function ChartController($scope, $routeParams ) {
                 $scope.$apply();
                 //$('#container').highcharts().hideLoading();
                 $scope.loading = false;
+                $scope.getannotations();
 
             }
         });
@@ -397,7 +400,7 @@ function ChartController($scope, $routeParams ) {
 
               }
             },
-        annotations: $scope.annotations,
+        annotations: [],//$scope.annotations,
         series: [
             {
                 id: $scope.ticker,
@@ -439,21 +442,43 @@ function ChartController($scope, $routeParams ) {
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
                 $.each(data.Annotations, function(e,o){
-                    $scope.annotations.push(o);
+                    //$scope.annotations.push(o);
+                    var events= {
+                                click: function(e){
+                                    $scope.showing = !$scope.showing;
+                                    $scope.$apply();
+	                        	    console.log(e);
+                                    e.preventDefault()
+                                },
+                                dblclick: function(e){
+                                    this.destroy();
+                                },
+                                contextmenu: function(e){
+                                    //alert("Menu!");
+                                    //$('#constext-menu-div').css({top: e.chartY, left: e.chartX});
+	                        	    //$('#constext-menu-div').show();
+                                    $scope.showing = true;
+                                    $scope.$apply();
+	                        	    console.log(e);
+                                    e.preventDefault()
+                                }
+                            };
+                    o.events = events;
 
+                    $('.highcharts-container').parent().highcharts().addAnnotation(o);
                 });
                 $scope.$apply();
-                $('.highcharts-container').parent().highcharts().redrawAnnotations();
+                //$('.highcharts-container').parent().highcharts().redrawAnnotations();
             }
         });
     }
     $scope.saveannotations = function(){
         var a = $('.highcharts-container').parent().highcharts().annotations.allItems;
 
-        $scope.annotations = [];
+        var annotations = [];
          $.each(a, function(e,o){
 
-            $scope.annotations.push(
+            annotations.push(
                 {
                     anchorX: "left",
                     anchorY: "top",
@@ -468,13 +493,10 @@ function ChartController($scope, $routeParams ) {
                 });
         });
 
-        //$scope.annotations = a;
-        //$scope.$apply();
-
 
         $.ajax({
             url: '/api/saveannotations/'+$scope.ticker,
-            data: JSON.stringify({ 'annotations': $scope.annotations }),
+            data: JSON.stringify({ 'annotations': annotations }),
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
@@ -483,13 +505,15 @@ function ChartController($scope, $routeParams ) {
 
 
 
-
     }
     $scope.removeannotations = function(){
-        $scope.annotations = [];
-        $scope.$apply();
-        $('.highcharts-container').parent().highcharts().redrawAnnotations();
+        var a = $('.highcharts-container').parent().highcharts().annotations.allItems;
+        $.each(a, function(e,o){
+            o.destroy();
+        });
+
     }
+
     $scope.backtest = function(){
         $scope.loading_backtest = true;
         $.ajax({
@@ -545,8 +569,7 @@ function ChartController($scope, $routeParams ) {
         });
     }
     $scope.showing = false;
-    $scope.amount = 0;
-    $scope.totalprice;
+    $scope.amount = 1;
     $scope.buyposition = function () {
         $.ajax({
             url: '/api/portfolio/buy/'+$scope.ticker,
@@ -554,11 +577,6 @@ function ChartController($scope, $routeParams ) {
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
-                if(!data.Success){
-                    alert(data['error']);
-                }else{
-                    alert("Added to portfolio");
-                }
             }
         });
     }

@@ -3,15 +3,16 @@
 <div ng-show="scanning">Scanning...</div>
 
 <div ng-show="positions.length ==0">No Positions found</div>
-
-<div ng-show="portfolio.open_positions.length < 1">
-    <h2>No Positions in Portfolio</h2>
+<h2>Portfolio: {{portfolio.name}}</h2>
+Cash: {{portfolio.cash}}
+<div ng-hide="portfolio.open_positions.length > 0">
+    <h3>No Positions in Portfolio</h3>
 </div>
 <div ng-init="getportfolio()" ng-show="portfolio.open_positions.length > 0">
     <h2>Positions in Portfolio:</h2>
     <ul ng-repeat="p in portfolio.open_positions">
         <li>
-            {{p.ticker}} - {{p.buy_date}} - {{p.buy_price}}
+            {{p.amount}} - {{p.ticker}} - {{p.buy_date}} - {{p.buy_price}} - {{p.amount * p.buy_price}}
             <button class="btn btn-success" ng-click="sellposition(p)">Sell</button>
         </li>
     </ul>

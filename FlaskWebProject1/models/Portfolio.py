@@ -1,13 +1,14 @@
 from datetime import date, timedelta, datetime
 import ystockquote as y
 from decimal import *
+import json as j
 
 class Portfolio(object):
     def __init__(self, name, start_cash):
         self.name = name
         self.open_positions = []
         self.closed_positions = []
-        self.cash = start_cash
+        self.cash = int(start_cash)
 
     def buy(self, ticker, amount):
         buy_price = y.get_price(ticker)
@@ -15,12 +16,12 @@ class Portfolio(object):
         pos = Position(ticker, buy_date, buy_price, amount)
         self.open_positions.append(pos)
         buy = Decimal(buy_price.strip(' "')) * Decimal(amount)
-        self.cash = self.cash - buy
+        self.cash = int(self.cash - buy)
 
     def sell(self, ticker):
         position = [i for i in self.open_positions if i.ticker == ticker][0]
         profit = position.sell()
-        self.cash = self.cash + profit
+        self.cash = int(self.cash + profit)
         self.open_positions.remove(position)
         self.closed_positions.append(position)
 

@@ -15,7 +15,7 @@
 
 <input ng-model="amount"/>
 <button class="btn btn-primary" ng-click="buyposition()">Buy</button>
-
+{{currentprice*amount}}
 <highchart ng-init="getchartdata()" id="chart1" config="chartConfig" class="span10"></highchart>
 
 <div>
