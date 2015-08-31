@@ -159,6 +159,21 @@ function ChartController($scope, $routeParams ) {
     $scope.loading_backtest = false;
     $scope.backtester = {};
     $scope.backtesting = [];
+    $scope.gettickers = function(){
+        $.ajax({
+            url: '/api/tickers/',
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $scope.tickers = data.result;
+                $scope.$apply();
+            },
+            complete: function (data) {
+                notyMessage(data);
+            },
+        });
+    };
+
     $scope.getchartdata = function(){
         //console.log($scope.chartConfig);
         //$scope.chartConfig.series[0].data.unshift([1426118400,10, 15, 8, 9]);
@@ -204,7 +219,10 @@ function ChartController($scope, $routeParams ) {
                 $scope.loading = false;
                 $scope.getannotations();
 
-            }
+            },
+            complete: function (data) {
+                notyMessage(data);
+            },
         });
     };
     $scope.toggleLoading = function () {
@@ -258,7 +276,8 @@ function ChartController($scope, $routeParams ) {
                 }
             },
             rangeSelector: {
-                enabled: false
+                enabled: true,
+                selected: 1
             },
             plotOptions: {
                 series: {
@@ -435,58 +454,89 @@ function ChartController($scope, $routeParams ) {
 
 
     }
+
+    $scope.events= {
+            click: function(e){
+                $scope.showing = !$scope.showing;
+                $scope.$apply();
+                console.log(e);
+                e.preventDefault()
+            },
+            dblclick: function(e){
+                this.destroy();
+            },
+            contextmenu: function(e){
+                //alert("Menu!");
+                //$('#constext-menu-div').css({top: e.chartY, left: e.chartX});
+                //$('#constext-menu-div').show();
+                $scope.showing = true;
+                $scope.$apply();
+                console.log(e);
+                e.preventDefault()
+            }
+        };
+
     $scope.getannotations = function(){
         $.ajax({
             url: '/api/getannotations/'+$scope.ticker,
             type: 'GET',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
-                $.each(data.Annotations, function(e,o){
-                    //$scope.annotations.push(o);
-                    var events= {
-                                click: function(e){
-                                    $scope.showing = !$scope.showing;
-                                    $scope.$apply();
-	                        	    console.log(e);
-                                    e.preventDefault()
-                                },
-                                dblclick: function(e){
-                                    this.destroy();
-                                },
-                                contextmenu: function(e){
-                                    //alert("Menu!");
-                                    //$('#constext-menu-div').css({top: e.chartY, left: e.chartX});
-	                        	    //$('#constext-menu-div').show();
-                                    $scope.showing = true;
-                                    $scope.$apply();
-	                        	    console.log(e);
-                                    e.preventDefault()
-                                }
-                            };
-                    o.events = events;
+                var annotations = JSON.parse( data.Annotations );
 
-                    $('.highcharts-container').parent().highcharts().addAnnotation(o);
+                $.each(annotations, function(e,o){
+                    //o.events= events;
+                     var ev =
+                        {
+                            id: o.id,
+                            anchorX: "left",
+                            anchorY: "top",
+                            linkedTo: $scope.ticker,
+                            xValue: o.xValue,
+                            yValue: o.yValue,
+                            xValueEnd: o.xValueEnd,
+                            yValueEnd: o.yValueEnd,
+                            shape: {
+                                params: {
+                                  fill: "rgba(0,0,0,0)",
+                                  stroke: "#000000",
+                                },
+                                type: 'path',
+                            },
+                            events: $scope.events
+
+                        };
+
+                    $('.highcharts-container').parent().highcharts().addAnnotation(ev);
+
                 });
                 $scope.$apply();
                 //$('.highcharts-container').parent().highcharts().redrawAnnotations();
-            }
+            },
+            complete: function (data) {
+                notyMessage(data);
+            },
         });
     }
     $scope.saveannotations = function(){
         var a = $('.highcharts-container').parent().highcharts().annotations.allItems;
+        //var subset = _(a).pick('options', 'shape');
 
         var annotations = [];
          $.each(a, function(e,o){
 
             annotations.push(
                 {
+                    id: o.options.id,
                     anchorX: "left",
                     anchorY: "top",
                     linkedTo: $scope.ticker,
-                    xValue: Math.round(o.options.xValue),
-                    yValue: Math.round(o.options.yValue),
-                    xValueEnd: Math.round(o.options.xValueEnd),
-                    yValueEnd: Math.round(o.options.yValueEnd),
+                    //options: {
+                        xValue: Math.round(o.options.xValue),
+                        yValue: Math.round(o.options.yValue),
+                        xValueEnd: Math.round(o.options.xValueEnd),
+                        yValueEnd: Math.round(o.options.yValueEnd),
+                    //},
                     shape: {
                         type: 'path'
                     }
@@ -500,17 +550,62 @@ function ChartController($scope, $routeParams ) {
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
-            }
+                if(data.Success)
+                {
+                    $scope.removeannotations();
+                    var annotations = JSON.parse( data.result );
+                    //Remove all annotations
+
+                    //Redraw with new properties
+                    $.each(annotations, function(e,o){
+                    //o.events= events;
+                     var ev =
+                        {
+                            id: o.id,
+                            anchorX: "left",
+                            anchorY: "top",
+                            linkedTo: $scope.ticker,
+                            xValue: o.xValue,
+                            yValue: o.yValue,
+                            xValueEnd: o.xValueEnd,
+                            yValueEnd: o.yValueEnd,
+                            shape: {
+                                params: {
+                                  fill: "rgba(0,0,0,0)",
+                                  stroke: "#000000",
+                                },
+                                type: 'path',
+                            },
+                            events: $scope.events
+
+                        };
+
+                        $('.highcharts-container').parent().highcharts().addAnnotation(ev);
+
+                    });
+                }
+            },
+            complete: function (data) {
+                notyMessage(data);
+            },
+
         });
 
 
 
     }
     $scope.removeannotations = function(){
+
         var a = $('.highcharts-container').parent().highcharts().annotations.allItems;
-        $.each(a, function(e,o){
-            o.destroy();
-        });
+
+        while(a.length>0){
+            try{
+                $.each(a, function(e,o){
+                    o.destroy();
+                });
+
+            }catch(ex){}
+        };
 
     }
 
@@ -522,7 +617,8 @@ function ChartController($scope, $routeParams ) {
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
                 $scope.loading_backtest = false;
-                $scope.backtesting = data.result.trades;
+                var result = JSON.parse( data.result );
+                $scope.backtesting = result.trades;
                 $scope.chartConfig.series[2].data = [];
                 //Add flags
                 $.each($scope.backtesting, function(e,o){
@@ -542,7 +638,10 @@ function ChartController($scope, $routeParams ) {
                 });
 
                 $scope.$apply();
-            }
+            },
+            complete: function (data) {
+                notyMessage(data);
+            },
         });
     }
     $scope.getpeaks = function(){
@@ -565,7 +664,10 @@ function ChartController($scope, $routeParams ) {
                 });
 
                 $scope.$apply();
-            }
+            },
+            complete: function (data) {
+                notyMessage(data);
+            },
         });
     }
     $scope.showing = false;
@@ -577,7 +679,10 @@ function ChartController($scope, $routeParams ) {
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
-            }
+            },
+            complete: function (data) {
+                notyMessage(data);
+            },
         });
     }
 

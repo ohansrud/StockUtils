@@ -13,7 +13,7 @@ class Backtester(object):
         self.item = item
 
         try:
-            self.s = st(item, 1, 730)
+            self.s = st(item, None, 730)
         except:
             print("Import Error")
 
@@ -38,33 +38,33 @@ class Backtester(object):
                     #Cannot buy and sell on the same day. Skips to next day to look for exit.
                     i= i+1
                     #Look for exit signal
-                    while i < len(self.s.df)-1:
+                    while i < len(self.s.df):
                         #Set stop loss and take profit +- 5 * atr of previous day
-                        atr = self.s.atr[i-1]
+                        atr = self.s.df['atr'][i-1]
                         stop_loss = self.s.df['close'][i-1] - atr * 5
                         take_profit = self.s.df['close'][i-1] + atr* 5
-
+                        #len =
                         #Look for stop loss
                         if self.s.df['close'][i] < stop_loss or self.s.df['low'][i] < stop_loss:
                             sell_price = stop_loss
-                            print("Stop loss!")
+                            comment = "Stop loss!"
                             break
 
                         #Look for take profit
                         elif self.s.df['close'][i] > take_profit or self.s.df['high'][i] > take_profit:
                             sell_price = take_profit
-                            print("Take profit!")
+                            comment = "Take profit!"
                             break
 
                         #Look for sell signal
                         elif self.s.df[self.sell_signal][i] == 1:
-                            print("Exit signal!")
+                            comment = "Exit signal!"
                             sell_price = self.s.df['close'][i]
                             break
 
                         #Look for last day
                         elif i == len(self.s.df)-1:
-                            print("End of sequence")
+                            comment = "End of sequence"
                             sell_price = self.s.df['close'][i]
                             break
                         else:
@@ -72,7 +72,7 @@ class Backtester(object):
 
                     sell_date = self.s.df.index[i]
                     cash = cash + (sell_price*stocks)
-                    self.result.trades.append(BacktestingTrade(buy_price, sell_price, buy_date, sell_date, cash, stocks).serialize)
+                    self.result.trades.append(BacktestingTrade(buy_price, sell_price, buy_date, sell_date, cash, stocks, comment))
                     print(self.s.df.index[i])
                     print("Sell: " + str(sell_price))
                     print("Profit: " + str((sell_price*stocks)-(buy_price*stocks)))
@@ -95,7 +95,7 @@ class Backtester(object):
             cash = cash + (sell_price*stocks)
 
             print(self.s.df.index[i-1])
-            self.result.trades.append(BacktestingTrade(buy_price, sell_price, buy_date, sell_date, cash, stocks))
+            self.result.trades.append(BacktestingTrade(buy_price, sell_price, buy_date, sell_date, cash, stocks, "Selling remaining"))
             print("Sell: " + str(sell_price))
             print("Profit: " + str((sell_price*stocks)-(buy_price*stocks)))
             stocks = 0
@@ -112,10 +112,13 @@ class Backtester_DoubleCross(Backtester):
         cash = 10000
         stocks = 0
 
+        self.s.ma_200()
         self.s.stoch_crossover()
         self.s.macd_crossover()
         self.s.doublecross()
         self.s.slowk_drops_under_80()
+        self.s.ma_200()
+
         self.backtest()
 
 class Backtester_RSI(Backtester):

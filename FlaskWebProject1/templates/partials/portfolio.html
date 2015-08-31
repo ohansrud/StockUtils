@@ -1,20 +1,148 @@
 {% raw %}
 <button class="btn btn-success" ng-click="getportfolio()">Get Portfolio</button>
-<div ng-show="scanning">Scanning...</div>
+<div ng-show="loading">Fetching...</div>
 
 <div ng-show="positions.length ==0">No Positions found</div>
 <h2>Portfolio: {{portfolio.name}}</h2>
-Cash: {{portfolio.cash}}
+
 <div ng-hide="portfolio.open_positions.length > 0">
     <h3>No Positions in Portfolio</h3>
 </div>
 <div ng-init="getportfolio()" ng-show="portfolio.open_positions.length > 0">
     <h2>Positions in Portfolio:</h2>
-    <ul ng-repeat="p in portfolio.open_positions">
-        <li>
-            {{p.amount}} - {{p.ticker}} - {{p.buy_date}} - {{p.buy_price}} - {{p.amount * p.buy_price}}
-            <button class="btn btn-success" ng-click="sellposition(p)">Sell</button>
-        </li>
-    </ul>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Ticker
+                </th>
+                <th>
+                    Buy Date
+                </th>
+                <th>
+                    Buy Price
+                </th>
+                <th>
+                    Current Price
+                </th>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Value
+                </th>
+                <th>
+                    Profit
+                </th>
+                <th>
+                    Sell
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="p in portfolio.open_positions">
+                <td>
+                    {{p.ticker}}
+                </td>
+                <td>
+                    {{p.buy_date}}
+                </td>
+                <td>
+                    {{p.buy_price}}
+                </td>
+                <td>
+                    {{p.current_price}}
+                </td>
+                <td>
+                    {{p.amount}}
+                </td>
+                <td>
+                    {{p.amount * p.buy_price}}
+                </td>
+                <td>
+                    {{p.profit}}
+                </td>
+                <td>
+                   <button class="btn btn-success" ng-click="sellposition(p)">Sell</button>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                    Cash: {{portfolio.cash}}
+                </td>
+                <td>
+                    Value: {{portfolio.value}}
+                </td>
+            </tr>
+        </tfoot>
+
+
+    </table>
+</div>
+
+<div>
+    <h2>Closed Positions</h2>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Ticker
+                </th>
+                <th>
+                    Buy Date
+                </th>
+                <th>
+                    Buy Price
+                </th>
+                <th>
+                    Sell Date
+                </th>
+                <th>
+                    Sell Price
+                </th>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Value
+                </th>
+                <th>
+                    Profit
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="p in portfolio.closed_positions">
+                <td>
+                    {{p.ticker}}
+                </td>
+                <td>
+                    {{p.buy_date | date}}
+                </td>
+                <td>
+                    {{p.buy_price}}
+                </td>
+                <td>
+                    {{p.sell_date | date}}
+                </td>
+                <td>
+                    {{p.sell_price}}
+                </td>
+                <td>
+                    {{p.amount}}
+                </td>
+                <td>
+                    {{p.amount * p.buy_price}}
+                </td>
+                <td>
+                    {{p.profit}}
+                </td>
+            </tr>
+        </tbody>
+
+
+    </table>
 </div>
 {% endraw %}

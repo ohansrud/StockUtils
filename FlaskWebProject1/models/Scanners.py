@@ -1,5 +1,6 @@
 from datetime import date, timedelta, datetime
 from FlaskWebProject1.models.StockQuote import StockQuote as st
+import sys
 
 portfolio_OL = ["ASC.OL","APCL.OL","AFG.OL","AGA.OL","AKA.OL","AKER.OL","AKPS.OL","AKSO.OL",
 "AKVA.OL","AMSC.OL","ABT.OL","ARCHER.OL","AFK.OL","ASETEK.OL","ATEA.OL","AURLPG.OL","AUSS.OL","AVANCE.OL","AVM.OL","AWDR.OL","BAKKA.OL","BEL.OL",
@@ -20,7 +21,6 @@ portfolio = ["BAKKA.OL","BIOTEC.OL","SOLV.OL","EVRY.OL","GOGL.OL", "XXL.OL"]
 
 class Scanner(object):
     def __init__(self, prereqs, triggers, length):
-        #self.s = st(item, 1, 730)
         self.found = []
         self.portfolio = portfolio_OL
         self.length = length
@@ -29,12 +29,16 @@ class Scanner(object):
         self.scan()
 
     def scan(self):
-        #self.portfolio = ['HEX.OL']
+        s= Scraper()
+
+        self.portfolio = s.OL()
+
         for item in self.portfolio:
 
             print(item)
             try:
-                s = st(item, 0, self.length)
+                #s = st("GSF.OL", None, self.length)
+                s = st(item, None, self.length)
                 s.df['test'] = 0
                 s.df['test'][0] = 1
                 l = len(s.df)
@@ -70,8 +74,40 @@ class ScannerRSI(Scanner):
         self.length = 60
         Scanner.__init__(self, self.prereqs, self.triggers, self.length)
 
+class ScannerCrossings(Scanner):
+    def __init__(self):
+        self.prereqs = ['inter']
+        self.triggers = 'ann_cross'
+        self.length = 30
+        Scanner.__init__(self, self.prereqs, self.triggers, self.length)
+
+
+class ScannerStoploss(Scanner):
+    def __init__(self):
+        self.prereqs = ['slowk_drops_under_80', 'atr_stoploss']
+        self.triggers = 'rsi_over_70'
+        self.length = 60
+        Scanner.__init__(self, self.prereqs, self.triggers, self.length)
 
 '''
+def scanner_stoploss():
+    found = []
+    for item in portfolio_OL:
+
+        print(item)
+
+        try:
+            s = st(item, 1, 31)
+            t = s.scan_stoploss()
+            if t == True:
+                found.append(item)
+        except:
+            print("Import Error")
+        print("---------------------------------------")
+
+    return found
+
+
 def scanner_obv():
     found = []
     for item in portfolio_OL:
@@ -149,3 +185,4 @@ def scanner_stoploss():
 
     return found
 '''
+

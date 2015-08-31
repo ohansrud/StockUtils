@@ -1,7 +1,17 @@
-Flask<1
-ystockquote<1
-mock<1
-zigzag<1
-jsonpickle<1
-pandas<1
+#Pre-compiled windows binaries: http://www.lfd.uci.edu/~gohlke/pythonlibs/
+
+Flask
+Flask-SQLAlchemy
+ystockquote
+mock
+zigzag
+pandas
+numpy=>1.7.0
+pypacker
+TA-lib
+python-dateutil
+SQLAlchemy
+jsonpickle
+flask-socketio
+BeautifulSoup
 

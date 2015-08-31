@@ -5,6 +5,7 @@ from FlaskWebProject1 import app
 @app.route('/')
 @app.route('/scan/')
 @app.route('/portfolio/')
+@app.route('/portfolio/<id>')
 @app.route('/chart/')
 @app.route('/chart/<ticker>')
 def basic_pages(**kwargs):

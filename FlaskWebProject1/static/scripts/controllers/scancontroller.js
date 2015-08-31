@@ -5,7 +5,7 @@ function ScanController($scope, $routeParams ) {
 
     $scope.findings = [];
     $scope.scanning = false;
-    $scope.scanners = ["RSI70", "Doublecross","OBV", "stoploss"]
+    $scope.scanners = ["RSI70", "Doublecross","OBV", "stoploss", "intersections"]
     $scope.scanner = {};
 
     $scope.scan = function(){

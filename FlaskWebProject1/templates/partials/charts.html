@@ -1,0 +1,21 @@
+{% raw %}
+
+    <table ng-init="gettickers()" class="table table-hoved table-striped">
+		<thead>
+			<tr>
+				<th>
+					Ticker
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="ticker in tickers">
+				<td>
+					 <a href='/chart/{{ticker}}'>{{ticker}}</a>
+				</td>
+			</tr>
+		</tbody>
+
+    </table>
+
+{% endraw %}

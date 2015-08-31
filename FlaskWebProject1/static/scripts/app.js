@@ -29,6 +29,10 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 			templateUrl: '/templates/home.html',
 			controller: MainController
 		})
+		.when('/chart/', {
+			templateUrl: '/templates/charts.html',
+			controller: ChartController
+		})
 		.when('/chart/:ticker', {
 			templateUrl: '/templates/chart.html',
 			controller: ChartController
@@ -37,11 +41,15 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 			templateUrl: '/templates/scan.html',
 			controller: ScanController
 		})
-
 		.when('/portfolio/', {
+			templateUrl: '/templates/portfolios.html',
+			controller: PortfolioController
+		})
+		.when('/portfolio/:id', {
 			templateUrl: '/templates/portfolio.html',
 			controller: PortfolioController
 		})
+
 		.otherwise({
 			templateUrl: '/templates/home.html',
 			controller: MainController

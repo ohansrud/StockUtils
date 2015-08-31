@@ -1,0 +1,33 @@
+{% raw %}
+Portfolios
+<div ng-init="getportfolios()">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Value
+                </th>
+                <th>
+                    Cash
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="p in portfolios">
+                <td>
+                    <a href=portfolio/{{p.id}}>{{p.name}}</a>
+                </td>
+                <td>
+                    {{p.value}}
+                </td>
+                <td>
+                    {{p.cash}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endraw %}

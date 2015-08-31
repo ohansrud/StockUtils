@@ -3,6 +3,7 @@ from mock import MagicMock, Mock
 import unittest
 from FlaskWebProject1.models.StockQuote import StockQuote as st
 import numpy as np
+import tradingmachine
 
 class ProductionClass(object):
     data = "Test";
@@ -30,9 +31,13 @@ class TestCase(unittest.TestCase):
         #real.something = MagicMock()
         #real.method()
 
-        s = st("TEL.OL", "2014-01-01", "2014-02-02")
+        s = st("TEL.OL", "2014-01-01", 200)
         test = "sdadsa"
-        
+
+class TradingmachineTest(unittest.TestCase):
+    def test(self):
+
+        tradingmachine.MarketSimulator
 
         
 

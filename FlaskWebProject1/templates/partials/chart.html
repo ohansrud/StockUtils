@@ -16,17 +16,63 @@
 <input ng-model="amount"/>
 <button class="btn btn-primary" ng-click="buyposition()">Buy</button>
 {{currentprice*amount}}
-<highchart ng-init="getchartdata()" id="chart1" config="chartConfig" class="span10"></highchart>
+<highchart ng-init="getchartdata()" id="chart1" config="chartConfig" class="span10"  style="height: 900px; min-width: 1200px"></highchart>
 
-<div>
+<div ng-show="backtesting.length > 0">
 
-    <ul>
-        <li ng-repeat="trade in backtesting">
-            Buy: {{trade.buy_date}} - {{trade.buy_price}}
-            Sell: {{trade.sell_date}} - {{trade.sell_price}}
-            Cash: {{trade.cash}} - Profit: {{trade.profit}}
-        </li>
-    </ul>
+    <table class="table table-hoved table-striped">
+		<thead>
+			<tr>
+				<th>
+					Buy date
+				</th>
+				<th>
+					Buy price
+				</th>
+				<th>
+					Sell date
+				</th>
+				<th>
+					Sell price
+				</th>
+				<th>
+					Cash
+				</th>
+				<th>
+					Profit
+				</th>
+				<th>
+					Comment
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="trade in backtesting">
+				<td>
+					 {{trade.buy_date}}
+				</td>
+				<td>
+					 {{trade.buy_price}}
+				</td>
+				<td>
+					 {{trade.sell_date}}
+				</td>
+				<td>
+					 {{trade.sell_price}}
+				</td>
+				<td>
+					{{trade.cash}}
+				</td>
+				<td>
+					{{trade.profit}}
+				</td>
+				<td>
+					{{trade.comment}}
+				</td>
+			</tr>
+		</tbody>
+
+    </table>
 </div>
 <div>
 

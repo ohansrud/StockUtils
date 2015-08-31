@@ -6,6 +6,8 @@
     <title> My Flask Application</title>
     <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css" />
+
     <script src="/static/scripts/modernizr-2.6.2.js"></script>
     <script src="/static/scripts/jquery-1.10.2.js"></script>
     <script src="/static/scripts/bootstrap.js"></script>
@@ -13,7 +15,13 @@
     <script src="/static/scripts/angular.min.js"></script>
     <script src="/static/scripts/highstock.js"></script>
     <script src="/static/scripts/annotations.js"></script>
-    <!---->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.3.6/jquery.noty.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.3.6/layouts/top.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.3.6/layouts/topCenter.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.3.6/themes/default.min.js"></script>
+
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
 
     <script src="/static/scripts/highcharts-ng.js"></script>
@@ -24,6 +32,30 @@
     <script src="/static/scripts/controllers/portfoliocontroller.js"></script>
 
     <script src="/static/scripts/app.js"></script>
+    <script src="/static/scripts/functions.js"></script>
+    <script src="https://cdn.lukej.me/socket.io-client/0.9.16/socket.io.js"></script>
+    <script type="text/javascript">
+        /*
+        $(document).ready(function(){
+            var socket = io.connect('http://localhost:5000/test');
+
+            socket.emit('my event', {data: 'as'});
+
+            socket.on('my response', function(msg) {
+                $('#log').append('<p>Received: ' + msg.data + '</p>');
+            });
+            $('form#emit').submit(function(event) {
+                socket.emit('my event', {data: $('#emit_data').val()});
+                return false;
+            });
+
+            $('form#broadcast').submit(function(event) {
+                socket.emit('my broadcast event', {data: $('#broadcast_data').val()});
+                return false;
+            });
+        });
+        */
+    </script>
 </head>
 <body>
 	<div class="navbar navbar-inverse navbar-fixed-top">

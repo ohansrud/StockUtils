@@ -4,52 +4,133 @@ import pandas as pd
 import sys
 from pprint import pprint
 from datetime import datetime, timedelta
+import time
+from FlaskWebProject1.models.Annotation import Annotation
 
 class StockQuote(object):
-    """description of class"""
-    sma = []
-    stoch = []
-    macd = []
-    atr = []
-    obv = []
-    rsi = []
-    df = []
 
-    def __init__(self, ticker, start_days, end_days):
-
-        today = datetime.today()
-        day = timedelta(days=start_days)
-        year = timedelta(days=end_days)
-        start = today-year
-        end = today-day
-        start_str = str(start.strftime('%Y-%m-%d'))
-        end_str = str(end.strftime('%Y-%m-%d'))
+    def __init__(self, ticker, start_day= None, length=730):
+        self.ticker = ticker
+        if(start_day == None):
+            today = datetime.today()
+            start_day = today - timedelta(days=length)
+            start_str = str(start_day.strftime('%Y-%m-%d'))
+            end_str = str(today.strftime('%Y-%m-%d'))
+        else:
+            start_str = start_day
+            #start = time.strptime(start_day, "%Y-%m-%d")
+            start = datetime.strptime(start_str, "%Y-%m-%d")
+            end_day = start + timedelta(days=length)
+            end_str = str(end_day.strftime('%Y-%m-%d'))
 
         i = y.get_historical_prices(ticker, start_str, end_str)
 
         #Lag Pandas DataFrame
-        df = pd.DataFrame(i)
+        self.df = pd.DataFrame(i)
 
         #Snu Dataframe
-        df2 = df.transpose()
+        self.df = self.df.transpose()
 
         #endre datatype til float
-        df2 = df2.astype(float)
-        df2 = df2.rename(columns={'Close': 'close', 'High': 'high', 'Open': 'open', 'Low': 'low','Volume': 'volume'})
+        self.df = self.df.astype(float)
+        self.df = self.df.rename(columns={'Close': 'close', 'High': 'high', 'Open': 'open', 'Low': 'low','Volume': 'volume'})
 
-        self.stoch = abstract.STOCH(df2, 14, 3)
-        self.macd = abstract.MACD(df2)
-        self.atr = abstract.ATR(df2)
-        self.obv = abstract.OBV(df2) 
-        self.rsi = abstract.RSI(df2)
+        stoch = abstract.STOCH(self.df, 14, 1, 3)
+        macd = abstract.MACD(self.df)
+        atr = abstract.ATR(self.df)
+        obv = abstract.OBV(self.df)
+        rsi = abstract.RSI(self.df)
+
+        self.df['atr'] = pd.DataFrame(atr)
+        self.df['obv'] = pd.DataFrame(obv)
+        self.df['rsi'] = pd.DataFrame(rsi)
 
         #kombinerer to dataframes
-        self.df = pd.merge(df2, pd.DataFrame(self.macd), left_index=True, right_index=True, how='outer')
-        self.df = pd.merge(self.df, self.stoch, left_index=True, right_index=True, how='outer')
-        self.df = pd.merge(self.df, pd.DataFrame(self.atr), left_index=True, right_index=True, how='outer')
-        self.df = pd.merge(self.df, pd.DataFrame(self.obv), left_index=True, right_index=True, how='outer')
-        self.df = pd.merge(self.df, pd.DataFrame(self.rsi), left_index=True, right_index=True, how='outer')
-    
+        self.df = pd.merge(self.df, pd.DataFrame(macd), left_index=True, right_index=True, how='outer')
+        self.df = pd.merge(self.df, stoch, left_index=True, right_index=True, how='outer')
+
+    #Scanner etter tilfeller grafen krysser med inntegnede linjer (Annotations)
+    def inter(self):
+        self.df["inter"] = 0
+        self.df["ann_cross"] = 0
+        crossings = []
+        annotations = Annotation.query.filter_by(linkedTo = self.ticker).all()
+        for ann in annotations:
+            ann_id = ann.id
+            dx = ann.xValueEnd - ann.xValue
+            dy = ann.yValueEnd -ann.yValue
+            #Increase per day
+            delta = float(dy/dx)
+            #28.7 = 1438041600000
+            #t = 1438041600000
+            #Difference in days
+            #y = time.localtime(min(ann.xValueEnd, ann.xValue)/1000)
+            #start_str = time.strftime('%Y-%m-%d', y)
+            #y = time.localtime(max(ann.xValueEnd, ann.xValue)/1000)
+            #end_str = time.strftime('%Y-%m-%d', y)
+
+            #st = self.df.index.get_indexer_for((self.df[self.df.index == start_str].index))
+            #end = self.df.index.get_indexer_for((self.df[self.df.index == end_str].index))
+
+            #if(st>0):
+            #    i = st
+            #else:
+            #    i=0
+
+            #if(end>0):
+            #    end = end
+            #else:
+            #
+
+            end=len(self.df)
+            i=end-30
+
+            while i < end:
+            #for s in self.df:
+                try:
+                    date_time = self.df.index[i]
+                    #type = type(date_time)
+                    try:
+                        date_time = date_time._data[0]
+                    except:
+                        pass
+                    pattern = '%Y-%m-%d'
+
+                    #Current date of i in epoch format
+                    d = int(time.mktime(time.strptime(date_time, pattern))*1000)
+                    #Distance from start of line to current date
+                    dt = (d-ann.xValue)
+
+                    #If i is not before the start of the line
+                    if(dt>0):
+
+                        t = ann.yValue + (dt*delta)
+                        self.df['inter'][i] =t
+                        last_t = float(self.df.iloc[i-1]['inter'])
+                        #If last_has a value. Otherwise it cannot be compared
+                        if(last_t>0):
+                            #Close value of prev day
+                            last_close = float(self.df.iloc[i-1]['close'])
+                            #Close value of prev day
+                            close = float(self.df.iloc[i]['close'])
+                            if int(last_t) > int(last_close) and int(t) < int(close):
+                                r = "Grafen krysser opp over linja"
+                                self.df["ann_cross"][i] = 1
+                                index = self.df.index[i]
+                                crossings.append({'date':index, 'value':t, 'direction': 'up'})
+                            elif int(last_t) < int(last_close) and int(t) > int(close):
+                                r = "Grafen krysser ned under linja"
+                                self.df["ann_cross"][i] = 1
+                                index = self.df.index[i]
+                                crossings.append({'date':index, 'value':t, 'direction': 'down'})
+
+                except:
+                    d= sys.exc_info()
+                i=i+1
+            #days =  (dt/1000/3600/24)
+        return self.df
+
+
     #Scanner etter tilfeller der Slow K krysser med Slow D
     def stoch_crossover(self):
         self.df["array_K_cross_down"] = 0
@@ -59,6 +140,7 @@ class StockQuote(object):
             for i in range(0, len(self.df)):            
                 try:
                     #raise RuntimeError
+                    index = self.df.index[i]
                     k = self.df.iloc[i-1]['slowk']
                     k2 = self.df.iloc[i]['slowk']
                     d = self.df.iloc[i-1]['slowd']
@@ -87,6 +169,7 @@ class StockQuote(object):
 
         for i in range(0, len(self.df)):            
             try:
+                #index = self.df.index[i]
                 m = self.df.iloc[i-1]['macd']
                 m2 = self.df.iloc[i]['macd']
                 s = self.df.iloc[i-1]['macdsignal']
@@ -98,6 +181,7 @@ class StockQuote(object):
                 else:
                     #d krysser under k
                     if m < s and m2 > s2:
+                        print()
                         self.df['signal_cross_down'][i] = 1
             except:
                 pass
@@ -106,8 +190,18 @@ class StockQuote(object):
 
     #Moving average 200
     def ma_200(self):
-        ma_200 = abstract.OBV(self.df)
-        self.df = pd.merge(self.df, pd.DataFrame(ma_200), left_index=True, right_index=True, how='outer')
+        ma_200 = abstract.MA(self.df, 200)
+        self.df["ma_200"] = 0
+        for i in range(199, len(self.df)):
+            try:
+                ma = ma_200[i]
+                close = self.df.iloc[i]['close']
+
+                #If Close pirce is higher tha MA200
+                if ma < close:
+                    self.df['ma_200'][i] = 1
+            except:
+                pass
 
         return self.df
     
@@ -124,11 +218,37 @@ class StockQuote(object):
                 s3 = self.df.iloc[i-2]['signal_cross_down']
                 s4 = self.df.iloc[i-1]['signal_cross_down']
                 s5 = self.df.iloc[i]['signal_cross_down']
-    
+                ma = self.df.iloc[i]['ma_200']
+                k = self.df.iloc[i-1]['slowk']
                 #k krysser under d
                 if d == 1:
                     if s == 1 or s2 == 1 or s3 == 1 or s4 == 1 or s5 == 1:
-                        self.df['doublecross'][i-4] = 1
+                        #if k < 80:
+                        #if ma ==1:
+                        self.df['doublecross'][i] = 1
+            except:
+                pass
+
+        return self.df
+
+    def atr_stoploss(self):
+        self.df["atr_stoploss"] = 0
+        self.df["atr_takeprofit"] = 0
+
+        for i in range(0, len(self.df)):
+            try:
+                prev_close = self.df.iloc[i-1]['close']
+                atr = self.atr[i-1]
+                high = self.df.iloc[i-4]['high']
+                low = self.df.iloc[i-4]['low']
+                stoploss = prev_close - (atr * 5)
+                takeprofit = prev_close + (atr * 5)
+
+                #High higher than atr * 5
+                if high > takeprofit:
+                    self.df['atr_takeprofit'][i] = 1
+                elif low < stoploss:
+                    self.df['atr_stoploss'][i] = 1
             except:
                 pass
 
@@ -281,26 +401,6 @@ class StockQuote(object):
             #h2 = self.df.iloc[l-3]['doublecross']
             #h3 = self.df.iloc[l-4]['doublecross']
             if h == 1 or h1 ==1: #or h2 == 1 or h3 == 1:
-                print("Found")
-                return True
-            else:
-                print("No Symbol Found")
-                return False
-        except:
-            print("Error")
-            return False
-
-    def scan_stoploss(self):
-        try:
-            self.slowk_drops_under_80()
-            l = len(self.df)
-            prev_close = self.df.iloc[l-2]['close']
-            low = self.df.iloc[l-1]['low']
-            atr3 = self.atr[l-1] * 5
-            stoploss = prev_close -atr3
-            slowk_under_80 = self.df['slowk_drops_under_80'][l-1]
-
-            if low < stoploss or slowk_under_80 == 1:
                 print("Found")
                 return True
             else:
