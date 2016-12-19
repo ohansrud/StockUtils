@@ -3,15 +3,3 @@
 Flask
 Flask-SQLAlchemy
 ystockquote
-mock
-zigzag
-pandas
-numpy=>1.7.0
-pypacker
-TA-lib
-python-dateutil
-SQLAlchemy
-jsonpickle
-flask-socketio
-BeautifulSoup
-
