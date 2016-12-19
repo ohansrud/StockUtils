@@ -3,3 +3,5 @@
 Flask
 Flask-SQLAlchemy
 ystockquote
+pandas
+numpy
