@@ -1,0 +1,18 @@
+#Pre-compiled windows binaries: http://www.lfd.uci.edu/~gohlke/pythonlibs/
+
+Flask
+Flask-SQLAlchemy
+ystockquote
+mock
+zigzag
+pandas
+pypacker
+python-dateutil
+SQLAlchemy
+jsonpickle
+flask-socketio
+BeautifulSoup
+flask-cors
+
+gevent
+gunicorn
