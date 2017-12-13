@@ -1,17 +1,3 @@
 #Pre-compiled windows binaries: http://www.lfd.uci.edu/~gohlke/pythonlibs/
-
-Flask
-Flask-SQLAlchemy
-ystockquote
-mock
-zigzag
-pandas
-numpy=>1.7.0
-pypacker
-TA-lib
-python-dateutil
-SQLAlchemy
-jsonpickle
-flask-socketio
-BeautifulSoup
-
+# Mirrors prod
+-r requirements/common.txt
